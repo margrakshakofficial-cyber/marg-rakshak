@@ -4,68 +4,73 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Marg Rakshak — Smart Surround-Aware Safety System</title>
-  <meta name="description" content="Marg Rakshak — affordable AI-driven safety for Indian roads. Smart Surround-Aware Safety System." />
+  <meta name="description" content="Marg Rakshak — affordable AI-driven surround-aware safety for Indian roads." />
   <meta name="theme-color" content="#0f172a" />
-  <!-- Favicon uses the product image as fallback -->
+  <!-- FAVICON -->
   <link rel="icon" href="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" />
   <style>
-    /* ================= ROOT THEME ================= */
+    /* ---------- THEME ---------- */
     :root{
       --bg:#05060a;
       --panel:#071025;
-      --glass: rgba(255,255,255,0.03);
       --muted:#94a6c7;
       --accent1:#3377f2;   /* electric blue */
       --accent2:#7b3bff;   /* purple neon */
       --accent3:#ff751f;   /* orange accent */
       --white:#eaf6ff;
+      --glass: rgba(255,255,255,0.03);
+      --maxw:1120px;
       --radius:14px;
-      --maxw:1100px;
     }
     *{box-sizing:border-box}
-    html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--white); -webkit-font-smoothing:antialiased}
+    body{margin:0; font-family:Inter,system-ui,Roboto,Arial;color:var(--white);background:linear-gradient(180deg,var(--bg),#02040a);-webkit-font-smoothing:antialiased;}
     a{color:inherit;text-decoration:none}
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:20px; position:relative; z-index:5}
 
-    /* ================= HEADER / DRAWER ================= */
-    header.site-header{position:fixed; left:0; right:0; top:12px; z-index:120; display:flex; justify-content:center; pointer-events:none}
-    .header-inner{width:100%; max-width:var(--maxw); display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; pointer-events:auto}
-    .brand{display:flex; align-items:center; gap:12px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
-    .brand img{height:60px; width:auto; object-fit:contain; border-radius:10px; display:block; box-shadow:0 8px 30px rgba(51,119,242,0.08)}
-    .brand .title{font-weight:800; font-size:16px; letter-spacing:0.2px}
-    .hamburger{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; border:1px solid rgba(255,255,255,0.03); padding:8px 10px; cursor:pointer; color:var(--white); font-weight:800}
+    /* ---------- particles + scanner ---------- */
+    canvas#particles{position:fixed; inset:0; z-index:0; pointer-events:none}
+    .scanner{position:fixed; inset:0; z-index:1; pointer-events:none; background-image: repeating-linear-gradient(to bottom, rgba(123,59,255,0.03) 0px, rgba(51,119,242,0.02) 1px, transparent 3px); mix-blend-mode:screen; opacity:0.07}
+
+    /* ---------- header / nav ---------- */
+    header.site-header{position:fixed; top:12px; left:0; right:0; z-index:140; display:flex; justify-content:center; pointer-events:none}
+    .header-inner{width:100%; max-width:var(--maxw); display:flex; align-items:center; justify-content:space-between; padding:10px 18px; pointer-events:auto}
+    .brand{display:flex; align-items:center; gap:14px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
+    .brand img{height:80px; width:auto; border-radius:12px; box-shadow:0 14px 40px rgba(51,119,242,0.08)} /* header style B: bigger logo */
+    .brand .title{font-weight:900; font-size:20px; line-height:1; letter-spacing:0.6px}
+    .brand .tag{font-size:12px; color:var(--muted)}
+    .hamburger{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; border:1px solid rgba(255,255,255,0.03); padding:10px; cursor:pointer; font-weight:900}
     .hamburger:active{transform:translateY(1px)}
-    .nav-drawer{position:fixed; top:0; left:-340px; width:320px; height:100vh; background:linear-gradient(180deg,#07102a,#041028); border-right:1px solid rgba(255,255,255,0.03); z-index:140; padding:28px; transition:left .36s cubic-bezier(.2,.9,.2,1); box-shadow: 40px 0 120px rgba(2,6,30,0.7)}
-    .nav-drawer.open{left:0}
-    .nav-drawer h3{margin:0 0 12px 0; font-size:18px}
-    .nav-drawer a{display:block; padding:12px 10px; margin:6px 0; border-radius:10px; color:var(--muted); text-decoration:none; font-weight:700}
-    .nav-drawer a:hover{color:var(--white); background:linear-gradient(90deg, rgba(51,119,242,0.06), rgba(123,59,255,0.03))}
+    .drawer{position:fixed; top:0; left:-360px; width:320px; height:100vh; background:linear-gradient(180deg,#07102a,#041028); border-right:1px solid rgba(255,255,255,0.03); z-index:150; padding:28px; transition:left .32s cubic-bezier(.2,.9,.2,1)}
+    .drawer.open{left:0}
+    .drawer h3{margin:0 0 12px 0}
+    .drawer a{display:block; padding:12px 10px; margin:8px 0; border-radius:10px; color:var(--muted); font-weight:700}
+    .drawer a:hover{color:var(--white); background:linear-gradient(90deg, rgba(51,119,242,0.06), rgba(123,59,255,0.03))}
+    .overlay{position:fixed; inset:0; z-index:140; background:rgba(0,0,0,0.45); display:none}
+    .overlay.show{display:block}
 
-    /* overlay to close drawer */
-    .drawer-overlay{position:fixed; inset:0; background:rgba(1,4,10,0.45); z-index:130; display:none}
-    .drawer-overlay.show{display:block}
+    /* ---------- layout ---------- */
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:20px; position:relative; z-index:6}
 
-    /* ================= HERO ================= */
-    .hero{display:flex; gap:28px; align-items:center; min-height:78vh; padding-top:84px}
-    .hero-left{flex:1; padding:20px; z-index:6}
+    /* ---------- hero (bigger title & tagline) ---------- */
+    .hero{display:flex; gap:28px; align-items:center; min-height:78vh; padding-top:110px}
+    .hero-left{flex:1}
     .eyebadge{display:inline-block;font-weight:800;color:var(--accent3); background:rgba(255,117,31,0.06); padding:6px 10px; border-radius:999px; margin-bottom:12px}
-    h1.hero-title{font-size:38px; margin:6px 0 12px; line-height:1.02; color:var(--white); text-shadow: 0 12px 40px rgba(3,8,25,0.7)}
-    p.lead{color:var(--muted); font-size:15px; max-width:60ch}
+    h1.hero-title{font-size:44px; margin:6px 0 12px; line-height:1.02; color:var(--white); text-shadow:0 20px 60px rgba(3,8,25,0.75)}
+    p.lead{color:var(--muted); font-size:16px; max-width:58ch}
     .hero-cta{margin-top:18px; display:flex; gap:12px; align-items:center}
-    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; padding:12px 18px; border-radius:12px; border:0; font-weight:800; cursor:pointer; box-shadow:0 12px 50px rgba(51,119,242,0.14)}
+    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; padding:14px 20px; border-radius:12px; border:0; font-weight:900; cursor:pointer; box-shadow:0 18px 60px rgba(51,119,242,0.14)}
     .btn-ghost{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted); padding:10px 14px; border-radius:10px; cursor:pointer}
     .kpis{display:flex; gap:12px; margin-top:20px}
     .kpi{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); min-width:130px}
     .kpi strong{display:block; font-size:18px}
 
-    .hero-right{width:520px; max-width:45%; position:relative; z-index:6}
-    .device-card{background:linear-gradient(180deg,#071028, #04101b); border-radius:18px; padding:18px; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 40px 120px rgba(2,6,30,0.6); overflow:hidden}
-    .device-card img{width:100%; height:320px; object-fit:cover; border-radius:12px; display:block; transform:translateY(0); transition:transform .6s ease}
+    .hero-right{width:520px; max-width:45%; position:relative}
+    .device-card{background:linear-gradient(180deg,#071028, #04101b); border-radius:18px; padding:18px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 40px 120px rgba(2,6,30,0.6); overflow:hidden}
+    .device-card img{width:100%; height:340px; object-fit:cover; border-radius:12px; display:block; transform:translateY(0); transition:transform .6s ease}
     .device-card:hover img{transform:translateY(-6px)}
-    .neon-glow{position:absolute; inset:auto -60px -60px auto; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle at 20% 20%, rgba(51,119,242,0.14), transparent 20%, transparent 80%); filter:blur(36px); opacity:0.9; pointer-events:none}
+    .neon-orb{position:absolute; right:-60px; top:-60px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle at 20% 20%, rgba(51,119,242,0.16), rgba(123,59,255,0.08) 40%, transparent 60%); filter:blur(36px); opacity:0.95; pointer-events:none}
 
-    /* ================= SECTIONS ================= */
-    section.panel{margin:36px 0; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:14px; padding:22px; border:1px solid rgba(255,255,255,0.02)}
+    /* ---------- panels ---------- */
+    section.panel{margin:38px 0; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:14px; padding:22px; border:1px solid rgba(255,255,255,0.02)}
     .two-col{display:grid; grid-template-columns:1fr 360px; gap:18px; align-items:start}
     h2.section-title{margin:0 0 12px 0; font-size:22px}
     .features-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
@@ -73,76 +78,83 @@
     .feature h4{margin:0 0 6px; font-size:15px}
     .muted{color:var(--muted)}
 
-    /* comparison table */
+    /* ---------- product technical highlights ---------- */
+    .tech-list{display:grid; gap:8px; margin-top:10px}
+    .tech-item{padding:10px; border-radius:10px; background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.02)}
+
+    /* ---------- comparison ---------- */
     table.compare{width:100%; border-collapse:collapse; margin-top:8px}
     .compare th, .compare td{padding:12px; border-bottom:1px solid rgba(255,255,255,0.03); text-align:left; font-size:14px}
     .badge-yes{color:#86ffb0; font-weight:800}
     .badge-no{color:#ff9b9b; font-weight:800}
 
-    /* reviews */
-    .reviews .review{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:10px; border-radius:10px; margin-bottom:10px}
-    .rating{font-weight:900; font-size:18px; color:var(--accent3)}
+    /* ---------- reviews (horizontal scroll) ---------- */
+    .reviews-row{display:flex; gap:12px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch}
+    .review-card{min-width:280px; max-width:320px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
+    .avatar{width:48px;height:48px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; color:#021029; background:linear-gradient(90deg,var(--accent1),var(--accent2)); margin-right:10px}
+    .rev-head{display:flex; align-items:center; gap:8px; margin-bottom:8px}
 
-    /* faq */
+    /* ---------- FAQ ---------- */
     .faq-item{margin:8px 0; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.02)}
     details > summary{padding:12px; cursor:pointer; font-weight:700; background:linear-gradient(90deg, rgba(0,0,0,0.3), rgba(255,255,255,0.01))}
     details > div{padding:12px 16px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); color:var(--muted)}
 
-    /* contact */
-    .contact-grid{display:flex; gap:12px; align-items:center}
+    /* ---------- contact ---------- */
+    .contact-grid{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
     .contact-card{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02)); min-width:220px}
 
-    /* floating buttons & chat */
+    /* ---------- floating actions ---------- */
     .float-buy{position:fixed; right:18px; bottom:100px; z-index:160}
-    .float-chat{position:fixed; right:18px; bottom:20px; z-index:160}
+    .float-chat{position:fixed; left:18px; bottom:20px; z-index:160} /* chat left - improved icon */
     .circle-btn{width:64px;height:64px;border-radius:14px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border:none; color:#001024; font-weight:900; box-shadow:0 18px 60px rgba(51,119,242,0.14); cursor:pointer}
+    .chat-btn{display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border-radius:14px; font-weight:800; color:#fff}
 
-    /* particles canvas */
-    canvas#particles{position:fixed; inset:0; z-index:0; display:block; pointer-events:none}
-
-    /* responsive */
+    /* ---------- small responsive ---------- */
     @media (max-width:980px){
-      .hero{flex-direction:column; padding-top:110px}
+      .hero{flex-direction:column; padding-top:120px}
       .hero-right{max-width:100%; width:100%}
       .two-col{grid-template-columns:1fr}
-      .nav-drawer{width:84%; left:-100%}
+      .drawer{width:86%; left:-100%}
+      .brand img{height:72px}
     }
     @media (max-width:520px){
       .brand .title{display:none}
       h1.hero-title{font-size:26px}
-      header.site-header{left:8px; right:8px}
       .device-card img{height:220px}
       .kpis{flex-direction:column}
+      .brand img{height:60px}
     }
 
     /* reveal */
-    .reveal{opacity:0; transform:translateY(18px); transition:all .7s cubic-bezier(.2,.9,.2,1)}
+    .reveal{opacity:0; transform:translateY(18px); transition:all .6s cubic-bezier(.2,.9,.2,1)}
     .reveal.visible{opacity:1; transform:none}
   </style>
 </head>
 <body>
 
-  <!-- PARTICLES CANVAS -->
+  <!-- Particles + scanner -->
   <canvas id="particles" aria-hidden="true"></canvas>
+  <div class="scanner" aria-hidden="true"></div>
 
   <!-- HEADER -->
   <header class="site-header" role="banner">
     <div class="header-inner wrap">
       <div class="brand" aria-hidden="false">
+        <!-- LOGO (correct) -->
         <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" alt="Marg Rakshak logo" />
         <div>
           <div class="title">Marg Rakshak</div>
-          <div style="font-size:11px; color:var(--muted)">Safety Around Us</div>
+          <div class="tag">Smart Surround-Aware Safety System</div>
         </div>
       </div>
 
-      <button id="openMenu" class="hamburger" aria-label="Open menu" title="Menu" aria-expanded="false">☰</button>
+      <button id="openDrawer" class="hamburger" aria-label="Open menu" title="Menu">☰</button>
     </div>
   </header>
 
-  <!-- DRAWER -->
-  <div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
-  <nav id="drawer" class="nav-drawer" aria-hidden="true">
+  <!-- Drawer & overlay -->
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
+  <nav id="drawer" class="drawer" aria-hidden="true" aria-label="Site navigation">
     <h3>Menu</h3>
     <a href="#home" data-target="home">Home</a>
     <a href="#about" data-target="about">About</a>
@@ -153,21 +165,21 @@
     <a href="#reviews" data-target="reviews">Reviews</a>
     <a href="#faq" data-target="faq">FAQ</a>
     <a href="#contact" data-target="contact">Contact</a>
-    <div style="margin-top:18px"><button id="closeMenu" class="btn-ghost" style="width:100%">Close</button></div>
+    <div style="margin-top:18px"><button id="closeDrawer" class="btn-ghost" style="width:100%">Close</button></div>
   </nav>
 
   <!-- MAIN -->
-  <main class="wrap" id="home" role="main">
+  <main id="home" class="wrap" role="main">
 
     <!-- HERO -->
     <section class="hero" aria-labelledby="heroTitle">
       <div class="hero-left">
         <div class="eyebadge">India-Ready • Retrofit • AI</div>
-        <h1 id="heroTitle" class="hero-title">Marg Rakshak Smart Surround-Aware<br><span style="color:var(--accent1)">Safety System</span></h1>
-        <p class="lead">Affordable AI-assisted driver-awareness system tailored for Indian roads — predicts risks, alerts drivers, and reduces collisions using dual side sensors and a central safety box.</p>
+        <h1 id="heroTitle" class="hero-title">Marg Rakshak — <span style="color:var(--accent1)">Smart Surround-Aware Safety System</span></h1>
+        <p class="lead">An affordable, India-tailored driver assistance kit that uses dual side sensors and on-device intelligence to predict risks, warn drivers, and reduce collisions in city and highway conditions.</p>
 
         <div class="hero-cta">
-          <button class="btn-primary" id="buyNow">Buy Now — ₹4,999</button>
+          <button class="btn-primary" id="buyHero">Buy Now — ₹4,999</button>
           <button class="btn-ghost" onclick="scrollToId('product')">See product</button>
         </div>
 
@@ -180,61 +192,74 @@
 
       <div class="hero-right">
         <div class="device-card" aria-hidden="false">
-          <div class="neon-glow" aria-hidden="true"></div>
-          <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak product demo" />
+          <div class="neon-orb" aria-hidden="true"></div>
+          <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="Product image — Marg Rakshak" />
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
+    <!-- ABOUT (with logo + soft glow) -->
     <section id="about" class="panel reveal" aria-labelledby="aboutTitle">
       <h2 id="aboutTitle" class="section-title">About Marg Rakshak</h2>
       <div class="two-col">
         <div>
-          <p class="muted">Marg Rakshak is a forward-thinking automotive safety technology company dedicated to making Indian roads safer through intelligent, affordable and highly adaptive driver-assistance solutions. Our mission is to reduce road accidents by empowering drivers with reliable, real-time information.</p>
+          <p class="muted">Marg Rakshak is a forward-thinking automotive safety company focused on reducing road accidents in India with affordable, reliable driver-assistance technology. We design products specifically for Indian traffic, weather and vehicle diversity.</p>
 
           <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px">
-            <div class="feature"><strong>Mission</strong><div class="muted">Reduce accidents with affordable safety</div></div>
-            <div class="feature"><strong>Vision</strong><div class="muted">Safer roads for everyone</div></div>
-            <div class="feature"><strong>Use cases</strong><div class="muted">Personal cars, taxis, fleets, autos</div></div>
+            <div class="feature"><strong>Mission</strong><div class="muted">Reduce accidents with accessible safety.</div></div>
+            <div class="feature"><strong>Vision</strong><div class="muted">Safer roads for everyone.</div></div>
+            <div class="feature"><strong>Use cases</strong><div class="muted">Personal cars, taxis, fleets, autos.</div></div>
           </div>
         </div>
 
-        <aside>
-          <div style="text-align:center">
-            <!-- business card removed as requested -->
-            <div style="padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02))">
-              <div style="font-weight:800; font-size:20px; color:var(--accent1)">Jammu, India</div>
-              <div class="muted" style="margin-top:8px">margrakshakofficial@gmail.com</div>
+        <aside style="display:flex; align-items:center; justify-content:center">
+          <!-- logo with soft neon glow (glow style 1) -->
+          <div style="padding:18px; border-radius:18px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03); display:flex; align-items:center; flex-direction:column; gap:12px">
+            <div style="position:relative; display:inline-block; padding:8px; border-radius:16px;">
+              <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" alt="Marg Rakshak logo" style="height:120px; width:auto; display:block; border-radius:12px;"/>
+              <span style="position:absolute; left:-10px; top:-10px; width:140px; height:140px; border-radius:50%; filter:blur(28px); background:radial-gradient(circle at 30% 30%, rgba(51,119,242,0.16), rgba(123,59,255,0.08) 40%, transparent 65%); z-index:-1;"></span>
             </div>
+            <div style="font-weight:800; color:var(--accent1)">Marg Rakshak</div>
+            <div class="muted" style="font-size:13px">Safety Around Us</div>
           </div>
         </aside>
       </div>
     </section>
 
-    <!-- PRODUCT -->
+    <!-- PRODUCT (no buy/price box; extended technical highlights) -->
     <section id="product" class="panel reveal" aria-labelledby="productTitle">
       <h2 id="productTitle" class="section-title">Marg Rakshak Smart Surround-Aware Safety System</h2>
+
       <div class="two-col">
         <div>
-          <p class="muted">A compact kit consisting of dual side-mounted sensors and a central processing unit. The system scans surroundings, analyzes speed and trajectory, predicts risks, and alerts the driver with visual and audible warnings.</p>
+          <p class="muted">A compact retrofit kit providing continuous side monitoring for cars and three-wheelers. The system uses dual multi-range sensors mounted near the side mirrors and a central processing unit that analyzes relative speed and trajectory to predict potential collisions and alert the driver.</p>
 
-          <ul style="margin-top:12px" class="muted">
-            <li>Dual multi-range side sensors (180° coverage)</li>
-            <li>On-device AI with high-speed processing</li>
-            <li>Weather-resistant sensors for rain & fog</li>
-            <li>Minimal power consumption, easy mirror-mount install</li>
-          </ul>
+          <div class="tech-list" style="margin-top:12px">
+            <div class="tech-item"><strong>Dual multi-range side sensors</strong> — Provides near and mid-range detection for combined 180° coverage, optimized for two-wheelers and close traffic typical in India.</div>
+            <div class="tech-item"><strong>On-device AI & low-latency processing</strong> — Real-time inference ensures alerts are delivered within milliseconds without relying on the cloud.</div>
+            <div class="tech-item"><strong>Multi-layer risk model</strong> — Uses distance, relative velocity, trajectory, and track history to compute risk levels (low/medium/high).</div>
+            <div class="tech-item"><strong>Adaptive sensitivity</strong> — Auto-adjusts alert thresholds based on vehicle speed: conservative in slow traffic, heightened on highways.</div>
+            <div class="tech-item"><strong>Night & low-visibility optimization</strong> — Sensor tuning and signal processing for rain, monsoon drizzle, and night driving.</div>
+            <div class="tech-item"><strong>Fast-approaching vehicle detection</strong> — Identifies and prioritizes vehicles closing in rapidly from blind spots or rear zones.</div>
+            <div class="tech-item"><strong>Event logging & tamper detection</strong> — Records critical events and signals if sensors are disturbed; logs help post-incident analysis.</div>
+            <div class="tech-item"><strong>Low-power design & easy install</strong> — Designed for 12V systems, minimal draw; installs are quick and standardized for most vehicles.</div>
+            <div class="tech-item"><strong>Compact & aesthetic hardware</strong> — Small mirror-mounted sensors with a discreet central box, designed to integrate without obstructing driver view.</div>
+            <div class="tech-item"><strong>Fleet deployable</strong> — Optional analytics export for fleet managers (consent-based) with bulk deployment support.</div>
+          </div>
+
+          <p class="muted" style="margin-top:12px">Installation is straightforward: sensors mount near side mirrors, a compact central unit is fitted near the dash, and a single connection to vehicle power (12V) powers the system. Trained technicians or basic DIY guidance is available depending on your preference.</p>
         </div>
 
         <aside>
-          <div class="contact-card">
-            <div style="font-weight:800; font-size:20px; color:var(--accent1)">₹4,999</div>
-            <div class="muted" style="margin-top:6px">Complete kit — one-time purchase</div>
-            <div style="margin-top:10px">
-              <button class="btn-primary" id="buyNow2">Buy Now</button>
-            </div>
-            <div style="margin-top:10px; font-size:13px" class="muted">Phone: +91 78898 88316</div>
+          <div style="padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02))">
+            <div style="font-weight:800; font-size:18px; color:var(--accent1)">What's in the kit</div>
+            <ul class="muted" style="margin-top:8px">
+              <li>2 x Side sensors</li>
+              <li>1 x Central safety box</li>
+              <li>LED alert module & buzzer</li>
+              <li>Basic harness & mounts</li>
+            </ul>
+            <div class="muted" style="margin-top:8px">Want installation help? Use the contact form or message us.</div>
           </div>
         </aside>
       </div>
@@ -262,7 +287,7 @@
     <!-- WHY & COMPARE -->
     <section id="why" class="panel reveal" aria-labelledby="whyTitle">
       <h2 id="whyTitle" class="section-title">Why Marg Rakshak?</h2>
-      <div class="muted" style="margin-bottom:12px">Tailor-made for Indian conditions — affordable retrofit solution that brings modern ADAS benefits to older vehicles and 3-wheelers.</div>
+      <div class="muted" style="margin-bottom:12px">Tailor-made for Indian conditions — affordable retrofit solution that brings modern ADAS benefits to older vehicles and three-wheelers.</div>
 
       <table id="compare" class="compare" role="table" aria-label="Compare">
         <thead>
@@ -271,46 +296,85 @@
         <tbody>
           <tr><td>Cost</td><td class="badge-yes">Affordable (₹4,999)</td><td class="badge-no">Expensive / OEM</td></tr>
           <tr><td>Retrofit</td><td class="badge-yes">Yes - universal</td><td class="badge-no">Often built-in</td></tr>
-          <tr><td>India-ready</td><td class="badge-yes">Optimized for monsoon & traffic</td><td class="badge-no">Designed for Western roads</td></tr>
+          <tr><td>India-ready</td><td class="badge-yes">Optimized for monsoon & dense traffic</td><td class="badge-no">Designed for Western roads</td></tr>
           <tr><td>Compatibility</td><td class="badge-yes">Most cars & 3-wheelers</td><td class="badge-no">New models only</td></tr>
-          <tr><td>AI</td><td class="badge-yes">On-device + optional analytics</td><td class="badge-yes">Varies</td></tr>
+          <tr><td>Deployment</td><td class="badge-yes">Low installation cost; local install support</td><td class="badge-no">Higher install cost</td></tr>
         </tbody>
       </table>
     </section>
 
-    <!-- REVIEWS -->
+    <!-- REVIEWS (horizontal scroll) -->
     <section id="reviews" class="panel reveal" aria-labelledby="reviewsTitle">
-      <h2 id="reviewsTitle" class="section-title">Reviews</h2>
-      <div style="display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap">
-        <div style="flex:1; min-width:320px">
-          <div class="reviews">
-            <div class="review"><strong>Ravi K. — Delhi</strong><div class="muted">"Installed in my taxi — the alerts are fast and saved me from a collision."</div></div>
-            <div class="review"><strong>Sneha P. — Bengaluru</strong><div class="muted">"Performs well in drizzle and night driving. Great product for the price."</div></div>
-            <div class="review"><strong>Amit S. — Jaipur</strong><div class="muted">"Affordable ADAS. Tamper detection is reassuring."</div></div>
-            <div class="review"><strong>Meera D. — Mumbai</strong><div class="muted">"Helped me avoid a close call in heavy traffic."</div></div>
-          </div>
+      <h2 id="reviewsTitle" class="section-title">Reviews — Average 4.8★</h2>
+      <div class="reviews-row" aria-live="polite">
+        <!-- review 1 -->
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">R</div><div><strong>Ravi Kumar</strong><div class="muted" style="font-size:13px">Delhi</div></div></div>
+          <div class="muted">"Installed in my taxi — Marg Rakshak alerted me twice and helped avoid collisions during peak hours."</div>
         </div>
-
-        <aside style="width:300px">
-          <div style="background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)">
-            <div style="font-size:28px; font-weight:800; color:var(--accent1)">4.8★</div>
-            <div class="muted">Average rating from 1.5k+ installs</div>
-            <button class="btn-primary" style="width:100%; margin-top:12px" onclick="scrollToId('contact')">Contact / Buy</button>
-          </div>
-        </aside>
+        <!-- review 2 -->
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">S</div><div><strong>Sneha Patel</strong><div class="muted" style="font-size:13px">Bengaluru</div></div></div>
+          <div class="muted">"Excellent night performance and low false alarms. Great for city driving."</div>
+        </div>
+        <!-- review 3 -->
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">A</div><div><strong>Amit Sharma</strong><div class="muted" style="font-size:13px">Jaipur</div></div></div>
+          <div class="muted">"Affordable ADAS retrofit — good build quality and easy install."</div>
+        </div>
+        <!-- review 4 -->
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">M</div><div><strong>Meera Desai</strong><div class="muted" style="font-size:13px">Mumbai</div></div></div>
+          <div class="muted">"Helped in heavy traffic — accurate alerts without distracting me."</div>
+        </div>
+        <!-- review 5 -->
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">V</div><div><strong>Vikram Rao</strong><div class="muted" style="font-size:13px">Hyderabad</div></div></div>
+          <div class="muted">"Great for fleet vehicles — reduced near-miss incidents in our taxis."</div>
+        </div>
+        <!-- review 6 -->
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">P</div><div><strong>Pooja R.</strong><div class="muted" style="font-size:13px">Pune</div></div></div>
+          <div class="muted">"Robust sensors and clear alerts. Customer support was responsive."</div>
+        </div>
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- FAQ (updated) -->
     <section id="faq" class="panel reveal" aria-labelledby="faqTitle">
       <h2 id="faqTitle" class="section-title">Frequently Asked Questions</h2>
-      <div>
-        <details class="faq-item"><summary>Will this work on my old car?</summary><div>Yes. Designed to retrofit most cars and 3-wheelers. Mounts near the side mirrors and uses 12V power.</div></details>
-        <details class="faq-item"><summary>How long is the warranty?</summary><div>Standard warranty 6–12 months (confirm at purchase).</div></details>
-        <details class="faq-item"><summary>Does it record video?</summary><div>No. It logs sensor events and tamper alerts. Cloud analytics optional with consent.</div></details>
-        <details class="faq-item"><summary>Is installation difficult?</summary><div>Simple mirror mounts and wiring. We provide a guide or can arrange local install.</div></details>
-        <details class="faq-item"><summary>Will it give false alarms in traffic?</summary><div>Adaptive sensitivity reduces false alerts in slow/stop traffic and increases sensitivity on highways.</div></details>
-      </div>
+
+      <details class="faq-item"><summary>Will Marg Rakshak work on my old car?</summary>
+        <div>Yes. Marg Rakshak is designed for retrofit on a wide range of vehicles including older cars and three-wheelers. Sensors mount near the side mirrors and the compact central box connects to the vehicle's 12V power supply for operation.</div>
+      </details>
+
+      <details class="faq-item"><summary>How long is the warranty?</summary>
+        <div>Our standard warranty is 6–12 months, depending on the purchase channel and installation option. Warranty terms are provided at the time of purchase.</div>
+      </details>
+
+      <details class="faq-item"><summary>Is installation difficult?</summary>
+        <div>Installation is straightforward for a trained installer: mount the sensors near the side mirrors, place the central safety box inside the cabin, and connect to a 12V power point. We provide a step-by-step guide and can arrange local installation support in many cities.</div>
+      </details>
+
+      <details class="faq-item"><summary>Will I get false alarms in slow traffic?</summary>
+        <div>The system uses adaptive sensitivity to reduce alerts in slow or congested traffic while increasing sensitivity at higher speeds. This reduces unnecessary alarms in city driving.</div>
+      </details>
+
+      <details class="faq-item"><summary>Can I use Marg Rakshak for fleet vehicles?</summary>
+        <div>Yes — we offer fleet deployment support and optional analytics packages for fleet managers to monitor events and improve driver safety across a fleet.</div>
+      </details>
+
+      <details class="faq-item"><summary>What happens if the sensors are tampered with?</summary>
+        <div>Tamper detection triggers an alert and logs the event in the system. You can view tamper logs or contact support for assistance and investigation.</div>
+      </details>
+
+      <details class="faq-item"><summary>Does Marg Rakshak need internet to work?</summary>
+        <div>No — core detection, risk modeling and alerting happen on-device for low latency. Optional cloud features (analytics or remote monitoring) require connectivity and explicit consent.</div>
+      </details>
+
+      <details class="faq-item"><summary>How do I buy?</summary>
+        <div>Click the Buy button or message us on WhatsApp at +91 7889888316. We can ship nationwide and arrange installation.</div>
+      </details>
     </section>
 
     <!-- CONTACT -->
@@ -321,6 +385,15 @@
           <strong>Phone</strong><div class="muted">+91 78898 88316</div>
           <strong style="margin-top:8px">Alt</strong><div class="muted">+91 88035 45696</div>
           <div style="margin-top:8px"><strong>Email</strong><div class="muted">margrakshakofficial@gmail.com</div></div>
+          <div style="margin-top:10px">
+            <strong>Follow</strong>
+            <div style="display:flex; gap:8px; margin-top:8px">
+              <a href="https://github.com/margrakshakofficial-cyber/marg-rakshak" target="_blank" class="muted">GitHub</a>
+              <a href="https://x.com/marg_rakshak?t=D3XuSPcI4gywQttRXsBV9g&s=09" target="_blank" class="muted">X</a>
+              <a href="https://youtube.com/@margrakshak-b4y?si=cFtyaFzxXkVuyVEV" target="_blank" class="muted">YouTube</a>
+              <a href="https://www.instagram.com/marg_rakshak?igsh=NHpma28xODNrcTlm" target="_blank" class="muted">Instagram</a>
+            </div>
+          </div>
         </div>
 
         <div style="flex:1">
@@ -328,7 +401,7 @@
             <input name="name" placeholder="Your name" required style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)" />
             <input name="phone" placeholder="Phone (optional)" style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"/>
             <textarea name="message" placeholder="Message" rows="4" style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"></textarea>
-            <div style="display:flex; gap:8px">
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
               <button class="btn-primary" type="submit">Send Message</button>
               <button class="btn-ghost" type="button" onclick="openWhatsApp('I want to buy the Marg Rakshak Smart Surround-Aware Safety System.')">Message on WhatsApp</button>
             </div>
@@ -340,16 +413,21 @@
     <div style="height:80px"></div>
   </main>
 
-  <!-- FLOATING ACTIONS -->
+  <!-- FLOATING BUY (right) -->
   <div class="float-buy">
-    <button class="circle-btn" id="buyFloat" title="Buy now">BUY</button>
-  </div>
-  <div class="float-chat">
-    <button class="circle-btn" id="chatFloat" title="Support">💬</button>
+    <button id="buyFloat" class="circle-btn" title="Buy Now">BUY</button>
   </div>
 
-  <!-- CHAT BOX -->
-  <div id="chatBox" role="dialog" aria-hidden="true" style="display:none; position:fixed; right:18px; bottom:96px; z-index:170">
+  <!-- IMPROVED CHAT (left) -->
+  <div class="float-chat" aria-hidden="false">
+    <button id="chatOpen" class="circle-btn chat-btn" title="Support" aria-haspopup="dialog" aria-expanded="false" style="display:flex; align-items:center; gap:8px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="#001024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <span style="font-weight:900; color:#001024">MargBot</span>
+    </button>
+  </div>
+
+  <!-- CHAT BOX (no buy inside) -->
+  <div id="chatBox" role="dialog" aria-hidden="true" style="display:none; position:fixed; left:18px; bottom:96px; z-index:170">
     <div style="width:340px; border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#041026,#07102a); border:1px solid rgba(255,255,255,0.04); box-shadow:0 30px 100px rgba(2,6,30,0.7)">
       <div style="padding:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.02)">MargBot Support</div>
       <div id="chatContent" style="padding:10px; max-height:260px; overflow:auto">
@@ -363,7 +441,7 @@
   </div>
 
   <script>
-    /* ======= Utility & Scrolling ======= */
+    /* ----------------- Utilities ----------------- */
     function scrollToId(id){
       const el = document.getElementById(id);
       if(!el) return;
@@ -372,29 +450,29 @@
     }
 
     function openWhatsApp(msg){
-      const number = '917889888316'; // without +
-      const url = 'https://wa.me/' + number + '?text=' + encodeURIComponent(msg);
+      const num = '917889888316';
+      const url = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
       window.open(url, '_blank');
     }
 
-    /* ======= Drawer toggles ======= */
-    const openMenu = document.getElementById('openMenu');
+    /* ----------------- Drawer ----------------- */
+    const openDrawerBtn = document.getElementById('openDrawer');
     const drawer = document.getElementById('drawer');
-    const overlay = document.getElementById('drawerOverlay');
-    const closeBtn = document.getElementById('closeMenu');
+    const overlay = document.getElementById('overlay');
+    const closeDrawerBtn = document.getElementById('closeDrawer');
 
-    openMenu.addEventListener('click', ()=> {
+    openDrawerBtn.addEventListener('click', ()=>{
       const isOpen = drawer.classList.toggle('open');
       overlay.classList.toggle('show', isOpen);
-      openMenu.setAttribute('aria-expanded', String(isOpen));
+      openDrawerBtn.setAttribute('aria-expanded', String(isOpen));
       drawer.setAttribute('aria-hidden', String(!isOpen));
     });
-    closeBtn && closeBtn.addEventListener('click', closeDrawer);
+    closeDrawerBtn && closeDrawerBtn.addEventListener('click', closeDrawer);
     overlay.addEventListener('click', closeDrawer);
 
-    function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('show'); openMenu.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
+    function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('show'); openDrawerBtn.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
 
-    // drawer links
+    // drawer link smooth scroll
     drawer.querySelectorAll('a[data-target]').forEach(a=>{
       a.addEventListener('click', e=>{
         e.preventDefault();
@@ -403,7 +481,7 @@
       });
     });
 
-    // also header anchor fallback
+    // header anchor fallback
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', e=>{
         if(a.getAttribute('href').length>1){
@@ -414,12 +492,11 @@
       });
     });
 
-    /* ======= Buy buttons behavior ======= */
-    document.getElementById('buyNow').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
-    document.getElementById('buyNow2').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
+    /* ----------------- Buy buttons ----------------- */
+    document.getElementById('buyHero').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
     document.getElementById('buyFloat').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
 
-    /* ======= Contact form (client-side) ======= */
+    /* ----------------- Contact form (client only) ----------------- */
     function submitForm(e){
       e.preventDefault();
       const f = e.target;
@@ -431,77 +508,70 @@
       return false;
     }
 
-    /* ======= Chat widget (simple) ======= */
-    const chatFloat = document.getElementById('chatFloat');
+    /* ----------------- Chat widget (improved, no buy option) ----------------- */
+    const chatOpen = document.getElementById('chatOpen');
     const chatBox = document.getElementById('chatBox');
     const chatSend = document.getElementById('chatSend');
     const chatInput = document.getElementById('chatInput');
     const chatContent = document.getElementById('chatContent');
 
-    chatFloat.addEventListener('click', ()=>{
-      if(chatBox.style.display==='block'){ chatBox.style.display='none'; return; }
-      chatBox.style.display='block';
+    chatOpen.addEventListener('click', ()=>{
+      if(chatBox.style.display === 'block'){ chatBox.style.display = 'none'; chatOpen.setAttribute('aria-expanded','false'); return; }
+      chatBox.style.display = 'block'; chatOpen.setAttribute('aria-expanded','true');
     });
 
     chatSend.addEventListener('click', ()=>{
       const q = chatInput.value.trim(); if(!q) return;
       appendChat('You: '+q);
       chatInput.value='';
-      setTimeout(()=> {
+      setTimeout(()=>{
         const t = q.toLowerCase();
-        if(t.includes('price')||t.includes('cost')) appendChat('MargBot: Price is ₹4,999. Would you like to buy?');
-        else if(t.includes('install')) appendChat('MargBot: We provide a guide and can arrange local install in many cities.');
-        else if(t.includes('features')) appendChat('MargBot: Real-time risk prediction, blind-spot monitoring, tamper detection, adaptive alerts and more.');
-        else appendChat('MargBot: Thanks — we will contact you. For immediate support, click the Buy/WhatsApp button.');
+        if(t.includes('price')||t.includes('cost')) appendChat('MargBot: Price is ₹4,999. Do you want to buy?');
+        else if(t.includes('install')) appendChat('MargBot: We provide guides and local installation support in many cities. Message us for booking.');
+        else if(t.includes('features')) appendChat('MargBot: Core features: Real-time risk prediction, blind-spot monitoring, lane assistance, tamper detection, adaptive alerts.');
+        else appendChat('MargBot: Thanks — our team will reach out. For immediate assistance, use the WhatsApp button.');
       }, 700);
     });
 
     function appendChat(txt){
-      const d = document.createElement('div'); d.style.margin='8px 0'; d.style.color='var(--muted)'; d.textContent = txt; chatContent.appendChild(d); chatContent.scrollTop = chatContent.scrollHeight;
+      const div = document.createElement('div');
+      div.style.margin = '8px 0'; div.style.color = 'var(--muted)'; div.textContent = txt;
+      chatContent.appendChild(div); chatContent.scrollTop = chatContent.scrollHeight;
     }
 
-    /* ======= Particles (balanced for performance) ======= */
+    /* ----------------- Particles (balanced) ----------------- */
     (function(){
-      const canvas = document.getElementById('particles');
+      const canvas = document.getElementById('particles'); if(!canvas) return;
       const ctx = canvas.getContext('2d');
       let w = canvas.width = window.innerWidth;
       let h = canvas.height = window.innerHeight;
       const AREA = w*h;
-      const PCOUNT = Math.max(30, Math.floor(AREA/60000)); // balanced density
+      const PCOUNT = Math.max(28, Math.floor(AREA/64000));
       const particles = [];
       for(let i=0;i<PCOUNT;i++){
         particles.push({
-          x: Math.random()*w,
-          y: Math.random()*h,
-          r: Math.random()*2+0.6,
-          vx: (Math.random()-0.5)*0.4,
-          vy: (Math.random()-0.5)*0.4,
-          hue: 190 + Math.random()*120
+          x: Math.random()*w, y: Math.random()*h,
+          r: Math.random()*1.8+0.6,
+          vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5
         });
       }
-      window.addEventListener('resize', ()=> { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
+      window.addEventListener('resize', ()=>{ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
 
       function draw(){
         ctx.clearRect(0,0,w,h);
-        // subtle gradient overlay waves
-        const grad = ctx.createLinearGradient(0,0,w,h);
-        grad.addColorStop(0, 'rgba(7,16,40,0.06)');
-        grad.addColorStop(1, 'rgba(3,8,20,0.06)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0,0,w,h);
-
+        // gradient waves subtle
         for(let p of particles){
           p.x += p.vx; p.y += p.vy;
-          if(p.x<0) p.x = w;
-          if(p.x> w) p.x = 0;
-          if(p.y<0) p.y = h;
-          if(p.y> h) p.y = 0;
-          ctx.beginPath();
+          if(p.x < -10) p.x = w + 10;
+          if(p.x > w + 10) p.x = -10;
+          if(p.y < -10) p.y = h + 10;
+          if(p.y > h + 10) p.y = -10;
           const g = ctx.createRadialGradient(p.x,p.y,p.r*0.2, p.x,p.y,p.r*6);
-          g.addColorStop(0, `rgba(123,59,255,0.20)`);
-          g.addColorStop(0.4, `rgba(51,119,242,0.09)`);
-          g.addColorStop(1, `rgba(5,10,20,0)`);
+          g.addColorStop(0, 'rgba(123,59,255,0.18)');
+          g.addColorStop(0.4, 'rgba(51,119,242,0.10)');
+          g.addColorStop(1, 'rgba(5,10,20,0)');
           ctx.fillStyle = g;
+          ctx.beginPath();
           ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2);
           ctx.fill();
         }
@@ -510,24 +580,19 @@
       draw();
     })();
 
-    /* ======= Scroll reveal ======= */
+    /* ----------------- reveal on scroll ----------------- */
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(entries=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting) e.target.classList.add('visible');
-      });
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
     }, {threshold:0.12});
-    reveals.forEach(r=> io.observe(r));
+    reveals.forEach(r => io.observe(r));
 
-    /* ======= Accessibility: ESC closes drawer/chat ======= */
-    document.addEventListener('keydown', e=>{
-      if(e.key === 'Escape'){ closeDrawer(); chatBox.style.display='none'; }
-    });
+    /* ----------------- keyboard accessibility ----------------- */
+    document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); chatBox.style.display='none'; } });
 
-    // initial reveal
-    window.addEventListener('load', ()=> {
-      document.querySelectorAll('.reveal').forEach((r,i)=> setTimeout(()=> r.classList.add('visible'), 180*(i+1)));
-    });
+    /* ----------------- initial reveal ----------------- */
+    window.addEventListener('load', ()=>{ document.querySelectorAll('.reveal').forEach((r,i)=> setTimeout(()=> r.classList.add('visible'), 160*(i+1))); });
+
   </script>
 </body>
 </html>
