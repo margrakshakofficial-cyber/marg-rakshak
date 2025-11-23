@@ -1,489 +1,596 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Marg Rakshak — Smart Surround-Aware Safety System</title>
-<meta name="description" content="Marg Rakshak — affordable surround-aware safety for Indian roads."/>
-<meta name="theme-color" content="#0f172a" />
-<link rel="icon" href="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Marg Rakshak — Smart Surround-Aware Safety System</title>
+  <meta name="description" content="Marg Rakshak — affordable AI-driven surround-aware safety for Indian roads." />
+  <meta name="theme-color" content="#0f172a" />
+  <style>
+    /* ---------- THEME ---------- */
+    :root{
+      --bg:#05060a;
+      --panel:#071025;
+      --muted:#94a6c7;
+      --accent1:#3377f2;   /* electric blue */
+      --accent2:#7b3bff;   /* purple neon */
+      --accent3:#ff751f;   /* orange accent */
+      --white:#eaf6ff;
+      --glass: rgba(255,255,255,0.03);
+      --maxw:1120px;
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter,system-ui,Roboto,Arial;color:var(--white);background:linear-gradient(180deg,var(--bg),#02040a);-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none}
 
-<style>
-  :root{
-    --bg:#05060a; --panel:#071025; --muted:#94a6c7;
-    --a1:#3377f2; --a2:#7b3bff; --a3:#ff751f; --white:#eaf6ff;
-    --maxw:1120px; --r:14px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%; margin:0; font-family:Inter,system-ui,Roboto,Arial; background:linear-gradient(180deg,var(--bg),#02040a); color:var(--white); -webkit-font-smoothing:antialiased;}
-  a{color:inherit; text-decoration:none}
+    /* ---------- particles + scanner ---------- */
+    canvas#particles{position:fixed; inset:0; z-index:0; pointer-events:none}
+    .scanner{position:fixed; inset:0; z-index:1; pointer-events:none; background-image: repeating-linear-gradient(to bottom, rgba(123,59,255,0.03) 0px, rgba(51,119,242,0.02) 1px, transparent 3px); mix-blend-mode:screen; opacity:0.07}
 
-  /* canvas + scanner */
-  canvas#particles{position:fixed; inset:0; z-index:0; pointer-events:none}
-  .scanner{position:fixed; inset:0; z-index:1; pointer-events:none; background-image: repeating-linear-gradient(to bottom, rgba(123,59,255,0.03) 0px, rgba(51,119,242,0.02) 1px, transparent 3px); mix-blend-mode:screen; opacity:0.06}
+    /* ---------- header / nav ---------- */
+    header.site-header{position:fixed; top:12px; left:0; right:0; z-index:140; display:flex; justify-content:center; pointer-events:none}
+    .header-inner{width:100%; max-width:var(--maxw); display:flex; align-items:center; justify-content:space-between; padding:10px 18px; pointer-events:auto}
+    .brand{display:flex; align-items:center; gap:14px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
+    .brand img{height:80px; width:auto; border-radius:12px; box-shadow:0 14px 40px rgba(51,119,242,0.08)} /* header style B: bigger logo */
+    .brand .title{font-weight:900; font-size:20px; line-height:1; letter-spacing:0.6px}
+    .brand .tag{font-size:12px; color:var(--muted)}
+    .hamburger{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; border:1px solid rgba(255,255,255,0.03); padding:10px; cursor:pointer; font-weight:900; color:var(--white); } /* made visible */
+    .hamburger:active{transform:translateY(1px)}
+    .drawer{position:fixed; top:0; left:-360px; width:320px; height:100vh; background:linear-gradient(180deg,#07102a,#041028); border-right:1px solid rgba(255,255,255,0.03); z-index:150; padding:28px; transition:left .32s cubic-bezier(.2,.9,.2,1)}
+    .drawer.open{left:0}
+    .drawer h3{margin:0 0 12px 0}
+    .drawer a{display:block; padding:12px 10px; margin:8px 0; border-radius:10px; color:var(--muted); font-weight:700}
+    .drawer a:hover{color:var(--white); background:linear-gradient(90deg, rgba(51,119,242,0.06), rgba(123,59,255,0.03))}
+    .overlay{position:fixed; inset:0; z-index:140; background:rgba(0,0,0,0.45); display:none}
+    .overlay.show{display:block}
 
-  /* header sticky */
-  header.site-header{position:sticky; top:10px; display:flex; justify-content:center; z-index:160; pointer-events:none}
-  .header-inner{width:100%; max-width:var(--maxw); display:flex; align-items:center; justify-content:space-between; padding:10px 18px; pointer-events:auto}
-  .brand{display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03)}
-  /* LOGO: swapped as requested (logo = PicsArt file) */
-  .brand img{height:80px; width:auto; border-radius:12px; box-shadow:0 14px 40px rgba(51,119,242,0.08)}
-  .brand .title{font-weight:900; font-size:20px}
-  .brand .tag{font-size:12px; color:var(--muted)}
-  /* neon hamburger (line-art visible) */
-  .hamburger{width:50px; height:44px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--white); font-weight:800; gap:6px}
-  .hamburger svg{display:block}
-  .drawer{position:fixed; top:0; left:-360px; width:320px; height:100vh; background:linear-gradient(180deg,#07102a,#041028); border-right:1px solid rgba(255,255,255,0.03); z-index:150; padding:28px; transition:left .32s;}
-  .drawer.open{left:0}
-  .drawer a{display:block; padding:12px 10px; margin:8px 0; border-radius:10px; color:var(--muted); font-weight:700}
-  .overlay{position:fixed; inset:0; z-index:140; background:rgba(0,0,0,0.45); display:none}
-  .overlay.show{display:block}
+    /* ---------- layout ---------- */
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:20px; position:relative; z-index:6}
 
-  /* layout */
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:20px; position:relative; z-index:6}
-  .hero{display:flex; gap:28px; align-items:center; min-height:76vh; padding-top:20px}
-  .hero-left{flex:1}
-  .eyebadge{display:inline-block;font-weight:800;color:var(--a3); background:rgba(255,117,31,0.06); padding:6px 10px; border-radius:999px; margin-bottom:12px}
-  h1.hero-title{font-size:44px; margin:6px 0 12px; line-height:1.02; color:var(--white); text-shadow:0 18px 48px rgba(0,0,0,0.7)}
-  p.lead{color:var(--muted); font-size:16px; max-width:60ch}
-  .btn-primary{background:linear-gradient(90deg,var(--a1),var(--a2)); color:white; padding:12px 18px; border-radius:12px; border:0; font-weight:900; cursor:pointer}
-  .btn-ghost{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted); padding:10px 14px; border-radius:10px}
+    /* ---------- hero (bigger title & tagline) ---------- */
+    .hero{display:flex; gap:28px; align-items:center; min-height:78vh; padding-top:110px}
+    .hero-left{flex:1}
+    .eyebadge{display:inline-block;font-weight:800;color:var(--accent3); background:rgba(255,117,31,0.06); padding:6px 10px; border-radius:999px; margin-bottom:12px}
+    h1.hero-title{font-size:44px; margin:6px 0 12px; line-height:1.02; color:var(--white); text-shadow:0 20px 60px rgba(3,8,25,0.75)}
+    p.lead{color:var(--muted); font-size:16px; max-width:58ch}
+    .hero-cta{margin-top:18px; display:flex; gap:12px; align-items:center}
+    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; padding:14px 20px; border-radius:12px; border:0; font-weight:900; cursor:pointer; box-shadow:0 18px 60px rgba(51,119,242,0.14)}
+    .btn-ghost{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted); padding:10px 14px; border-radius:10px; cursor:pointer}
+    .kpis{display:flex; gap:12px; margin-top:20px}
+    .kpi{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); min-width:130px}
+    .kpi strong{display:block; font-size:18px}
 
-  .hero-right{width:520px; max-width:45%; position:relative}
-  .device-card{background:linear-gradient(180deg,#071028, #04101b); border-radius:18px; padding:18px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 40px 120px rgba(2,6,30,0.6); overflow:hidden}
-  /* PRODUCT IMAGE: swapped as requested (product = Adobe Express file) */
-  .device-card img{width:100%; height:340px; object-fit:cover; border-radius:12px; display:block}
+    .hero-right{width:520px; max-width:45%; position:relative}
+    .device-card{background:linear-gradient(180deg,#071028, #04101b); border-radius:18px; padding:18px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 40px 120px rgba(2,6,30,0.6); overflow:hidden}
+    .device-card img{width:100%; height:340px; object-fit:cover; border-radius:12px; display:block; transform:translateY(0); transition:transform .6s ease}
+    .device-card:hover img{transform:translateY(-6px)}
+    .neon-orb{position:absolute; right:-60px; top:-60px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle at 20% 20%, rgba(51,119,242,0.16), rgba(123,59,255,0.08) 40%, transparent 60%); filter:blur(36px); opacity:0.95; pointer-events:none}
 
-  /* panels */
-  section.panel{margin:36px 0; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:14px; padding:22px; border:1px solid rgba(255,255,255,0.02)}
-  .two-col{display:grid; grid-template-columns:1fr 360px; gap:18px; align-items:start}
-  h2.section-title{margin:0 0 12px 0; font-size:22px}
-  .features-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+    /* ---------- panels ---------- */
+    section.panel{margin:38px 0; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:14px; padding:22px; border:1px solid rgba(255,255,255,0.02)}
+    .two-col{display:grid; grid-template-columns:1fr 360px; gap:18px; align-items:start}
+    h2.section-title{margin:0 0 12px 0; font-size:22px}
+    .features-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+    .feature{background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02)); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.02)}
+    .feature h4{margin:0 0 6px; font-size:15px}
+    .muted{color:var(--muted)}
 
-  /* product section: simplified kit + how it works */
-  .kit-list{display:grid; gap:10px; margin-top:8px}
-  .kit-item{display:flex; gap:10px; align-items:flex-start; background:rgba(255,255,255,0.01); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.02)}
-  .kit-item svg{width:38px;height:38px; flex:0 0 38px; stroke:var(--a1);}
-  .how-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:12px}
-  .how-card{display:flex; gap:10px; align-items:flex-start; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); background:rgba(255,255,255,0.006)}
-  .how-card svg{width:36px;height:36px; stroke:var(--a2); flex:0 0 36px}
+    /* ---------- product technical highlights simplified ---------- */
+    .tech-list{display:grid; gap:8px; margin-top:10px}
+    .tech-item{padding:10px; border-radius:10px; background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.02)}
 
-  /* reviews: full-size centered carousel */
-  .reviews-wrap{position:relative; display:flex; justify-content:center; align-items:center}
-  .reviews-track{width:100%; display:flex; justify-content:center; align-items:center; overflow:hidden}
-  .review-slide{min-width:640px; max-width:760px; margin:0 6px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:18px; border-radius:14px; border:1px solid rgba(255,255,255,0.03); display:flex; gap:12px; align-items:flex-start; transition:transform .5s;}
-  .review-centered{transform:scale(1)}
-  .review-side{transform:scale(.88); opacity:0.6}
-  .avatar{width:72px;height:72px;border-radius:18px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:28px; color:#021029; background:linear-gradient(90deg,var(--a1),var(--a2)); flex:0 0 72px}
-  .stars{color:var(--a3); font-weight:900; letter-spacing:2px; margin-bottom:6px}
-  /* remove manual scrollbar appearance on some browsers */
-  .reviews-track::-webkit-scrollbar{display:none}
+    /* ---------- comparison ---------- */
+    table.compare{width:100%; border-collapse:collapse; margin-top:8px}
+    .compare th, .compare td{padding:12px; border-bottom:1px solid rgba(255,255,255,0.03); text-align:left; font-size:14px}
+    .badge-yes{color:#86ffb0; font-weight:800}
+    .badge-no{color:#ff9b9b; font-weight:800}
 
-  /* faq & contact */
-  .faq-item{margin:8px 0; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.02)}
-  details > summary{padding:12px; cursor:pointer; font-weight:700}
-  details > div{padding:12px 16px; color:var(--muted)}
-  .contact-grid{display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap}
-  .contact-card{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02)); min-width:260px}
-  .social-bar{display:flex; gap:10px; margin-top:12px}
-  .social-icon{width:44px;height:44px;border-radius:10px; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--a1),var(--a2)); color:#021029; font-weight:900}
+    /* ---------- reviews (horizontal scroll) ---------- */
+    .reviews-row{display:flex; gap:12px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch}
+    .review-card{min-width:280px; max-width:320px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
+    .avatar{width:48px;height:48px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; color:#021029; background:linear-gradient(90deg,var(--accent1),var(--accent2)); margin-right:10px}
+    .rev-head{display:flex; align-items:center; gap:8px; margin-bottom:8px}
 
-  /* floating AI chat button (bottom-right) */
-  .ai-chat{position:fixed; right:18px; bottom:18px; z-index:180}
-  .ai-btn{width:68px;height:68px;border-radius:16px; display:flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--a1),var(--a2)); border:none; color:#001024; font-weight:900; box-shadow:0 18px 60px rgba(51,119,242,0.14); cursor:pointer}
+    /* ---------- FAQ ---------- */
+    .faq-item{margin:8px 0; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.02)}
+    details > summary{padding:12px; cursor:pointer; font-weight:700; background:linear-gradient(90deg, rgba(0,0,0,0.3), rgba(255,255,255,0.01))}
+    details > div{padding:12px 16px; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); color:var(--muted)}
 
-  /* responsive */
-  @media (max-width:980px){
-    .hero{flex-direction:column; padding-top:120px}
-    .hero-right{max-width:100%; width:100%}
-    .two-col{grid-template-columns:1fr}
-    .drawer{width:86%; left:-100%}
-    .brand img{height:64px}
-    .review-slide{min-width:84vw; max-width:84vw}
-  }
-  @media (max-width:520px){
-    .brand .title{display:none}
-    h1.hero-title{font-size:26px}
-    .device-card img{height:220px}
-    .brand img{height:56px}
-  }
-  .reveal{opacity:0; transform:translateY(14px); transition:all .6s}
-  .reveal.visible{opacity:1; transform:none}
-</style>
+    /* ---------- contact ---------- */
+    .contact-grid{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .contact-card{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02)); min-width:220px}
+    .social-box{display:flex; gap:8px; margin-top:10px}
+    .social-btn{padding:8px 10px; border-radius:8px; font-weight:700; color:#fff; display:inline-flex; align-items:center; gap:8px; text-decoration:none}
+
+    .x-btn{background:#000}   /* X / Twitter black */
+    .yt-btn{background:#FF0000}/* YouTube red */
+    .ig-btn{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af)} /* Instagram gradient */
+
+    /* ---------- floating actions (only chat on left) ---------- */
+    .float-chat{position:fixed; left:18px; bottom:20px; z-index:160}
+    .circle-btn{width:64px;height:64px;border-radius:14px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border:none; color:#001024; font-weight:900; box-shadow:0 18px 60px rgba(51,119,242,0.14); cursor:pointer}
+    .chat-btn{display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border-radius:14px; font-weight:800; color:#fff}
+
+    /* ---------- small responsive ---------- */
+    @media (max-width:980px){
+      .hero{flex-direction:column; padding-top:120px}
+      .hero-right{max-width:100%; width:100%}
+      .two-col{grid-template-columns:1fr}
+      .drawer{width:86%; left:-100%}
+      .brand img{height:72px}
+    }
+    @media (max-width:520px){
+      .brand .title{display:none}
+      h1.hero-title{font-size:26px}
+      .device-card img{height:220px}
+      .kpis{flex-direction:column}
+      .brand img{height:60px}
+    }
+
+    /* reveal */
+    .reveal{opacity:0; transform:translateY(18px); transition:all .6s cubic-bezier(.2,.9,.2,1)}
+    .reveal.visible{opacity:1; transform:none}
+  </style>
 </head>
 <body>
 
-<!-- visuals -->
-<canvas id="particles" aria-hidden="true"></canvas>
-<div class="scanner" aria-hidden="true"></div>
+  <!-- Particles + scanner -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <div class="scanner" aria-hidden="true"></div>
 
-<!-- header sticky -->
-<header class="site-header" role="banner">
-  <div class="header-inner wrap">
-    <div class="brand" aria-hidden="false">
-      <!-- CORRECTED: logo now uses PicsArt image (logo file) -->
-      <img src="https://raw.githubusercontent.com/margrakshakofficial-cy/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo"/>
-      <div>
-        <div class="title">Marg Rakshak</div>
-        <div class="tag">Smart Surround-Aware Safety System</div>
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="header-inner wrap">
+      <div class="brand" aria-hidden="false">
+        <!-- LOGO (corrected: logo path now uses the 7324 file) -->
+        <img src="/mnt/data/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo" />
+        <div>
+          <div class="title">Marg Rakshak</div>
+          <div class="tag">Smart Surround-Aware Safety System</div>
+        </div>
       </div>
-    </div>
 
-    <!-- visible neon line-art hamburger -->
-    <button id="openDrawer" class="hamburger" aria-label="Open menu" title="Menu">
-      <!-- 3-line neon line-art svg -->
-      <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M2 3h24" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M2 10h24" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M2 17h24" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round"/>
-        <defs>
-          <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#7b3bff"/><stop offset="1" stop-color="#3377f2"/></linearGradient>
-        </defs>
-      </svg>
+      <button id="openDrawer" class="hamburger" aria-label="Open menu" title="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Drawer & overlay -->
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
+  <nav id="drawer" class="drawer" aria-hidden="true" aria-label="Site navigation">
+    <h3>Menu</h3>
+    <a href="#home" data-target="home">Home</a>
+    <a href="#about" data-target="about">About</a>
+    <a href="#product" data-target="product">Product</a>
+    <a href="#features" data-target="features">Features</a>
+    <a href="#why" data-target="why">Why</a>
+    <a href="#compare" data-target="compare">Compare</a>
+    <a href="#reviews" data-target="reviews">Reviews</a>
+    <a href="#faq" data-target="faq">FAQ</a>
+    <a href="#contact" data-target="contact">Contact</a>
+    <div style="margin-top:18px"><button id="closeDrawer" class="btn-ghost" style="width:100%">Close</button></div>
+  </nav>
+
+  <!-- MAIN -->
+  <main id="home" class="wrap" role="main">
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-left">
+        <div class="eyebadge">India-Ready • Retrofit • AI</div>
+        <h1 id="heroTitle" class="hero-title">Marg Rakshak — <span style="color:var(--accent1)">Smart Surround-Aware Safety System</span></h1>
+        <p class="lead">An affordable, India-tailored driver assistance kit that uses dual side sensors and on-device intelligence to predict risks, warn drivers, and reduce collisions in city and highway conditions.</p>
+
+        <div class="hero-cta">
+          <button class="btn-primary" id="buyHero">Buy Now — ₹4,999</button>
+          <button class="btn-ghost" onclick="scrollToId('product')">See product</button>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div class="muted">Rating</div><strong class="rating">4.8★</strong><div class="muted" style="font-size:13px">1.5k+ installs</div></div>
+          <div class="kpi"><div class="muted">Compatibility</div><strong>Most cars & 3-wheelers</strong></div>
+          <div class="kpi"><div class="muted">Price</div><strong style="color:var(--accent3)">₹4,999</strong></div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="device-card" aria-hidden="false">
+          <div class="neon-orb" aria-hidden="true"></div>
+          <!-- PRODUCT IMAGE (corrected: product path uses the Adobe Express file) -->
+          <img src="/mnt/data/Adobe Express - file.png" alt="Product image — Marg Rakshak" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT (with logo + soft glow) -->
+    <section id="about" class="panel reveal" aria-labelledby="aboutTitle">
+      <h2 id="aboutTitle" class="section-title">About Marg Rakshak</h2>
+      <div class="two-col">
+        <div>
+          <p class="muted">Marg Rakshak is a forward-thinking automotive safety company focused on reducing road accidents in India with affordable, reliable driver-assistance technology. We design products specifically for Indian traffic, weather and vehicle diversity.</p>
+
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px">
+            <div class="feature"><strong>Mission</strong><div class="muted">Reduce accidents with accessible safety.</div></div>
+            <div class="feature"><strong>Vision</strong><div class="muted">Safer roads for everyone.</div></div>
+            <div class="feature"><strong>Use cases</strong><div class="muted">Personal cars, taxis, fleets, autos.</div></div>
+          </div>
+        </div>
+
+        <aside style="display:flex; align-items:center; justify-content:center">
+          <!-- logo with soft neon glow (glow style 1) -->
+          <div style="padding:18px; border-radius:18px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03); display:flex; align-items:center; flex-direction:column; gap:12px">
+            <div style="position:relative; display:inline-block; padding:8px; border-radius:16px;">
+              <img src="/mnt/data/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo" style="height:120px; width:auto; display:block; border-radius:12px;"/>
+              <span style="position:absolute; left:-10px; top:-10px; width:140px; height:140px; border-radius:50%; filter:blur(28px); background:radial-gradient(circle at 30% 30%, rgba(51,119,242,0.16), rgba(123,59,255,0.08) 40%, transparent 65%); z-index:-1;"></span>
+            </div>
+            <div style="font-weight:800; color:var(--accent1)">Marg Rakshak</div>
+            <div class="muted" style="font-size:13px">Safety Around Us</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PRODUCT (simplified: only kit components + How it works) -->
+    <section id="product" class="panel reveal" aria-labelledby="productTitle">
+      <h2 id="productTitle" class="section-title">Marg Rakshak Smart Surround-Aware Safety System</h2>
+
+      <div class="two-col">
+        <div>
+          <p class="muted">A compact retrofit kit providing continuous side monitoring for cars and three-wheelers. The system combines two core components to sense the surroundings and inform the driver in real time.</p>
+
+          <!-- WHAT'S IN THE KIT: only two items -->
+          <div style="margin-top:12px">
+            <div class="tech-item"><strong>Side mirror sensors</strong> — High-precision dual sensors that mount near each side mirror to provide near and mid-range detection of vehicles, bikes and obstacles approaching from the sides.</div>
+            <div class="tech-item" style="margin-top:8px"><strong>Central dashboard screen (safety box)</strong> — The central processing unit that aggregates sensor data, runs risk models, and displays visual alerts plus audible warnings to the driver.</div>
+          </div>
+
+          <!-- HOW IT WORKS: four simple points (as requested) -->
+          <h3 style="margin-top:14px; margin-bottom:8px">How it works</h3>
+          <ol class="muted" style="margin-left:18px; margin-top:6px">
+            <li>Sensors continuously monitor side zones and detect nearby moving objects and relative speeds.</li>
+            <li>Central unit fuses sensor inputs and computes collision risk using distance, velocity and trajectory models.</li>
+            <li>If a risk crosses a threshold, the system issues timely audio-visual alerts on the dashboard screen.</li>
+            <li>Events are logged and tamper alerts are raised if sensors are disturbed; optional fleet analytics can aggregate these (consent based).</li>
+          </ol>
+
+          <p class="muted" style="margin-top:12px">Installation is straightforward for a trained installer — sensors mount near the side mirrors and the central unit is placed on the dash; power is drawn from the 12V supply. We offer installation support via our network.</p>
+        </div>
+
+        <aside>
+          <div style="padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02))">
+            <div style="font-weight:800; font-size:18px; color:var(--accent1)">What's in the kit</div>
+            <ul class="muted" style="margin-top:8px">
+              <li>Side mirror sensors (x2)</li>
+              <li>Central dashboard safety box (x1)</li>
+            </ul>
+            <div class="muted" style="margin-top:8px">Need installation help? Message us on WhatsApp or use the contact form.</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="panel reveal" aria-labelledby="featuresTitle">
+      <h2 id="featuresTitle" class="section-title">Features</h2>
+      <div class="features-grid" style="margin-top:12px">
+        <div class="feature"><h4>Real-Time Risk Prediction</h4><div class="muted">Forecasts collisions using distance, speed & trajectory.</div></div>
+        <div class="feature"><h4>Accident Alert System</h4><div class="muted">Immediate audio-visual alerts on high-risk detection.</div></div>
+        <div class="feature"><h4>Fast Vehicle Detection</h4><div class="muted">Detects rapidly approaching vehicles from blind zones.</div></div>
+        <div class="feature"><h4>Blind-Spot Monitoring</h4><div class="muted">Continuous detection to assist lane changes.</div></div>
+        <div class="feature"><h4>Lane Change Assistance</h4><div class="muted">Warnings on unsafe lane shifts.</div></div>
+        <div class="feature"><h4>Side Collision Warning</h4><div class="muted">Detects bikes and obstacles in tight traffic.</div></div>
+        <div class="feature"><h4>Adaptive Proximity Alerts</h4><div class="muted">Sensitivity adapts to vehicle speed.</div></div>
+        <div class="feature"><h4>Night & Low-Visibility Assistance</h4><div class="muted">Optimized sensing for fog, rain & night.</div></div>
+        <div class="feature"><h4>Intelligent Traffic Behavior Analysis</h4><div class="muted">Detects aggressive or unusual driving patterns.</div></div>
+        <div class="feature"><h4>Driver Attention Alerts</h4><div class="muted">Detects distraction or drift and notifies driver.</div></div>
+        <div class="feature"><h4>Tamper & Theft Detection</h4><div class="muted">Logs disturbance & warns owner.</div></div>
+        <div class="feature"><h4>Minimal Power Consumption</h4><div class="muted">Designed for 12V vehicle systems.</div></div>
+      </div>
+    </section>
+
+    <!-- WHY & COMPARE (removed deployment row, 4 points only) -->
+    <section id="why" class="panel reveal" aria-labelledby="whyTitle">
+      <h2 id="whyTitle" class="section-title">Why Marg Rakshak?</h2>
+      <div class="muted" style="margin-bottom:12px">Tailor-made for Indian conditions — an affordable retrofit solution bringing modern safety features to older vehicles and three-wheelers.</div>
+
+      <table id="compare" class="compare" role="table" aria-label="Compare">
+        <thead>
+          <tr><th>Feature</th><th>Marg Rakshak</th><th>Imported ADAS</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cost</td><td class="badge-yes">Affordable (₹4,999)</td><td class="badge-no">Expensive / OEM</td></tr>
+          <tr><td>Retrofit</td><td class="badge-yes">Yes - universal</td><td class="badge-no">Often built-in</td></tr>
+          <tr><td>India-ready</td><td class="badge-yes">Optimized for monsoon & dense traffic</td><td class="badge-no">Designed for Western roads</td></tr>
+          <tr><td>Compatibility</td><td class="badge-yes">Most cars & 3-wheelers</td><td class="badge-no">New models only</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- REVIEWS (horizontal scroll; restored earlier style; more reviews) -->
+    <section id="reviews" class="panel reveal" aria-labelledby="reviewsTitle">
+      <h2 id="reviewsTitle" class="section-title">Reviews — Average 4.8★</h2>
+      <div class="reviews-row" aria-live="polite">
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">R</div><div><strong>Ravi Kumar</strong><div class="muted" style="font-size:13px">Delhi</div></div></div>
+          <div class="muted">"Installed in my taxi — Marg Rakshak alerted me twice and helped avoid collisions during peak hours."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">S</div><div><strong>Sneha Patel</strong><div class="muted" style="font-size:13px">Bengaluru</div></div></div>
+          <div class="muted">"Excellent night performance and low false alarms. Great for city driving."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">A</div><div><strong>Amit Sharma</strong><div class="muted" style="font-size:13px">Jaipur</div></div></div>
+          <div class="muted">"Affordable ADAS retrofit — good build quality and easy install."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">M</div><div><strong>Meera Desai</strong><div class="muted" style="font-size:13px">Mumbai</div></div></div>
+          <div class="muted">"Helped in heavy traffic — accurate alerts without distracting me."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">V</div><div><strong>Vikram Rao</strong><div class="muted" style="font-size:13px">Hyderabad</div></div></div>
+          <div class="muted">"Great for fleet vehicles — reduced near-miss incidents in our taxis."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">P</div><div><strong>Pooja R.</strong><div class="muted" style="font-size:13px">Pune</div></div></div>
+          <div class="muted">"Robust sensors and clear alerts. Customer support was responsive."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-head"><div class="avatar">K</div><div><strong>Karan Mehta</strong><div class="muted" style="font-size:13px">Ahmedabad</div></div></div>
+          <div class="muted">"Good product for the price — installation was quick and user-friendly."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ (kept earlier updates; removed record video Q; removed 'wiring' term) -->
+    <section id="faq" class="panel reveal" aria-labelledby="faqTitle">
+      <h2 id="faqTitle" class="section-title">Frequently Asked Questions</h2>
+
+      <details class="faq-item"><summary>Will Marg Rakshak work on my old car?</summary>
+        <div>Yes. Marg Rakshak is designed for retrofit on a wide range of vehicles including older cars and three-wheelers. Sensors mount near the side mirrors and the compact central box connects to the vehicle's 12V power supply for operation.</div>
+      </details>
+
+      <details class="faq-item"><summary>How long is the warranty?</summary>
+        <div>Our standard warranty is 6–12 months, depending on the purchase channel and installation option. Warranty terms are provided at the time of purchase.</div>
+      </details>
+
+      <details class="faq-item"><summary>Is installation difficult?</summary>
+        <div>Installation is straightforward for a trained installer: sensors are mounted near the side mirrors, the central safety box is placed inside the cabin, and a single 12V power connection is used. We provide a step-by-step guide and can arrange local installation support in many cities.</div>
+      </details>
+
+      <details class="faq-item"><summary>Will I get false alarms in slow traffic?</summary>
+        <div>The system uses adaptive sensitivity to reduce alerts in slow or congested traffic while increasing sensitivity at higher speeds. This reduces unnecessary alarms in city driving.</div>
+      </details>
+
+      <details class="faq-item"><summary>Can I use Marg Rakshak for fleet vehicles?</summary>
+        <div>Yes — we offer fleet deployment support and optional analytics packages for fleet managers to monitor events and improve driver safety across a fleet.</div>
+      </details>
+
+      <details class="faq-item"><summary>What happens if the sensors are tampered with?</summary>
+        <div>Tamper detection triggers an alert and logs the event in the system. You can view tamper logs or contact support for assistance and investigation.</div>
+      </details>
+
+      <details class="faq-item"><summary>Does Marg Rakshak need internet to work?</summary>
+        <div>No — core detection, risk modeling and alerting happen on-device for low latency. Optional cloud features (analytics or remote monitoring) require connectivity and explicit consent.</div>
+      </details>
+
+      <details class="faq-item"><summary>How do I buy?</summary>
+        <div>Click the Buy button or message us on WhatsApp at +91 7889888316. We can ship nationwide and arrange installation.</div>
+      </details>
+    </section>
+
+    <!-- CONTACT (removed GitHub link; social box separate with brand colors) -->
+    <section id="contact" class="panel reveal" aria-labelledby="contactTitle">
+      <h2 id="contactTitle" class="section-title">Contact Us</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <strong>Phone</strong><div class="muted">+91 78898 88316</div>
+          <strong style="margin-top:8px">Alt</strong><div class="muted">+91 88035 45696</div>
+          <div style="margin-top:8px"><strong>Email</strong><div class="muted">margrakshakofficial@gmail.com</div></div>
+
+          <!-- Social media box (separate) -->
+          <div class="social-box" role="navigation" aria-label="Follow Marg Rakshak">
+            <a class="social-btn x-btn" href="https://x.com/marg_rakshak?t=D3XuSPcI4gywQttRXsBV9g&s=09" target="_blank">X</a>
+            <a class="social-btn yt-btn" href="https://youtube.com/@margrakshak-b4y?si=cFtyaFzxXkVuyVEV" target="_blank">YouTube</a>
+            <a class="social-btn ig-btn" href="https://www.instagram.com/marg_rakshak?igsh=NHpma28xODNrcTlm" target="_blank">Instagram</a>
+          </div>
+        </div>
+
+        <div style="flex:1">
+          <form id="contactForm" onsubmit="return submitForm(event)" style="display:flex; gap:8px; flex-direction:column">
+            <input name="name" placeholder="Your name" required style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)" />
+            <input name="phone" placeholder="Phone (optional)" style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"/>
+            <textarea name="message" placeholder="Message" rows="4" style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"></textarea>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <button class="btn-primary" type="submit">Send Message</button>
+              <button class="btn-ghost" type="button" onclick="openWhatsApp('I want to buy the Marg Rakshak Smart Surround-Aware Safety System.')">Message on WhatsApp</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div style="height:80px"></div>
+  </main>
+
+  <!-- IMPROVED CHAT (left) — AI support button only -->
+  <div class="float-chat" aria-hidden="false">
+    <button id="chatOpen" class="circle-btn chat-btn" title="Support" aria-haspopup="dialog" aria-expanded="false" style="display:flex; align-items:center; gap:8px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="#001024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <span style="font-weight:900; color:#001024">MargBot</span>
     </button>
   </div>
-</header>
 
-<!-- drawer + overlay -->
-<div id="overlay" class="overlay" aria-hidden="true"></div>
-<nav id="drawer" class="drawer" aria-hidden="true">
-  <h3>Menu</h3>
-  <a href="#home" data-target="home">Home</a>
-  <a href="#about" data-target="about">About</a>
-  <a href="#product" data-target="product">Product</a>
-  <a href="#features" data-target="features">Features</a>
-  <a href="#why" data-target="why">Why</a>
-  <a href="#reviews" data-target="reviews">Reviews</a>
-  <a href="#faq" data-target="faq">FAQ</a>
-  <a href="#contact" data-target="contact">Contact</a>
-  <div style="margin-top:18px"><button id="closeDrawer" class="btn-ghost" style="width:100%">Close</button></div>
-</nav>
-
-<!-- page -->
-<main id="home" class="wrap" role="main">
-
-  <!-- HERO -->
-  <section class="hero" aria-labelledby="heroTitle">
-    <div class="hero-left">
-      <div class="eyebadge">India-Ready • Retrofit • AI</div>
-      <h1 id="heroTitle" class="hero-title">Marg Rakshak — <span style="color:var(--a1)">Smart Surround-Aware Safety System</span></h1>
-      <p class="lead">A compact retrofit driver-assistance kit that watches the sides, predicts risks and warns drivers — designed for Indian roads and conditions.</p>
-
-      <div class="hero-cta">
-        <button class="btn-primary" id="buyHero">Buy Now — ₹4,999</button>
-        <button class="btn-ghost" onclick="scrollToId('product')">See product</button>
+  <!-- CHAT BOX (no buy inside) -->
+  <div id="chatBox" role="dialog" aria-hidden="true" style="display:none; position:fixed; left:18px; bottom:96px; z-index:170">
+    <div style="width:340px; border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#041026,#07102a); border:1px solid rgba(255,255,255,0.04); box-shadow:0 30px 100px rgba(2,6,30,0.7)">
+      <div style="padding:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.02)">MargBot Support</div>
+      <div id="chatContent" style="padding:10px; max-height:260px; overflow:auto">
+        <div style="color:var(--muted)">Hi! I'm MargBot. Try: "price", "install", "features", "support".</div>
       </div>
-    </div>
-
-    <div class="hero-right">
-      <div class="device-card">
-        <!-- CORRECTED: product image uses Adobe Express file -->
-        <img src="https://raw.githubusercontent.com/margrakshakofficial-cy/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" alt="Marg Rakshak product image"/>
+      <div style="display:flex; gap:8px; padding:10px; border-top:1px solid rgba(255,255,255,0.02)">
+        <input id="chatInput" placeholder="Type a question..." style="flex:1; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)" />
+        <button class="btn-primary" id="chatSend">Send</button>
       </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about" class="panel reveal" aria-labelledby="aboutTitle">
-    <h2 id="aboutTitle" class="section-title">About Marg Rakshak</h2>
-    <div class="two-col">
-      <div>
-        <p class="muted">Marg Rakshak creates simple, effective safety systems tailored to India — to reduce accidents and give drivers more confidence on busy roads and in low-visibility conditions.</p>
-
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px">
-          <div class="feature"><strong>Mission</strong><div class="muted">Reduce accidents with accessible safety.</div></div>
-          <div class="feature"><strong>Vision</strong><div class="muted">Safer roads for everyone.</div></div>
-          <div class="feature"><strong>Use cases</strong><div class="muted">Personal cars, taxis, fleets, autorickshaws.</div></div>
-        </div>
-      </div>
-
-      <!-- logo reuse with soft neon glow (glow style 1) -->
-      <aside style="display:flex; align-items:center; justify-content:center">
-        <div style="padding:18px; border-radius:18px; text-align:center; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03)">
-          <div style="position:relative; display:inline-block;">
-            <img src="https://raw.githubusercontent.com/margrakshakofficial-cy/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="logo" style="height:120px; width:auto; border-radius:12px; display:block"/>
-            <span style="position:absolute; left:-8px; top:-8px; width:138px; height:138px; border-radius:50%; filter:blur(28px); background:radial-gradient(circle at 30% 30%, rgba(51,119,242,0.16), rgba(123,59,255,0.08) 40%, transparent 65%); z-index:-1;"></span>
-          </div>
-          <div style="font-weight:800; color:var(--a1); margin-top:10px">Marg Rakshak</div>
-          <div class="muted" style="font-size:13px">Safety Around Us</div>
-        </div>
-      </aside>
-    </div>
-  </section>
-
-  <!-- PRODUCT: only kit components + how it works -->
-  <section id="product" class="panel reveal" aria-labelledby="productTitle">
-    <h2 id="productTitle" class="section-title">What's in the kit</h2>
-    <div class="two-col">
-      <div>
-        <p class="muted">Marg Rakshak is a 2-component retrofit kit — designed to provide continuous side monitoring and clear in-cab alerts.</p>
-
-        <div class="kit-list">
-          <div class="kit-item">
-            <!-- line-art icon -->
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.6" /></svg>
-            <div>
-              <strong>Side mirror sensors</strong>
-              <div class="muted">High-precision multi-range sensors mount near the side mirrors and monitor the side & blind zones for approaching vehicles and obstacles.</div>
-            </div>
-          </div>
-
-          <div class="kit-item">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="5" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 17h8" stroke="currentColor" stroke-width="1.6"/></svg>
-            <div>
-              <strong>Central dashboard screen</strong>
-              <div class="muted">A compact in-cab display shows live proximity, relative motion, and issues audio-visual alerts when risk thresholds are crossed.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- HOW IT WORKS (4 points with line-art icons) -->
-        <h3 style="margin-top:16px">How it works</h3>
-        <div class="how-grid">
-          <div class="how-card">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
-            <div><strong>Sense</strong><div class="muted">Side sensors continuously scan for vehicles and obstacles.</div></div>
-          </div>
-          <div class="how-card">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18" stroke="currentColor" stroke-width="1.6"/></svg>
-            <div><strong>Track</strong><div class="muted">Tracks relative position & speed of detected objects.</div></div>
-          </div>
-          <div class="how-card">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18" stroke="currentColor" stroke-width="1.6"/></svg>
-            <div><strong>Predict</strong><div class="muted">On-device model predicts collision risk using trajectory & speed.</div></div>
-          </div>
-          <div class="how-card">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/></svg>
-            <div><strong>Alert</strong><div class="muted">Visual + audible alerts on the dash to warn the driver immediately.</div></div>
-          </div>
-        </div>
-
-      </div>
-
-      <aside>
-        <div style="padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02));">
-          <div style="font-weight:800; font-size:18px; color:var(--a1)">Kit contents</div>
-          <ul class="muted" style="margin-top:8px">
-            <li>2 × Side mirror sensors</li>
-            <li>1 × Central dashboard screen</li>
-            <li>Mounts & basic harness</li>
-          </ul>
-          <div class="muted" style="margin-top:8px">Installation help available on request.</div>
-        </div>
-      </aside>
-    </div>
-  </section>
-
-  <!-- FEATURES (kept full but separate) -->
-  <section id="features" class="panel reveal" aria-labelledby="featuresTitle">
-    <h2 id="featuresTitle" class="section-title">Features</h2>
-    <div class="features-grid" style="margin-top:12px">
-      <div class="feature"><h4>Real-Time Risk Prediction</h4><div class="muted">Forecasts collisions using distance, speed & trajectory.</div></div>
-      <div class="feature"><h4>Accident Alert System</h4><div class="muted">Immediate audio-visual alerts on high-risk detection.</div></div>
-      <div class="feature"><h4>Fast Vehicle Detection</h4><div class="muted">Detects rapidly approaching vehicles from blind zones.</div></div>
-      <div class="feature"><h4>Blind-Spot Monitoring</h4><div class="muted">Continuous detection to assist lane changes.</div></div>
-      <div class="feature"><h4>Lane Change Assistance</h4><div class="muted">Warnings on unsafe lane shifts.</div></div>
-      <div class="feature"><h4>Side Collision Warning</h4><div class="muted">Detects bikes and obstacles in tight traffic.</div></div>
-      <div class="feature"><h4>Adaptive Proximity Alerts</h4><div class="muted">Sensitivity adapts to vehicle speed.</div></div>
-      <div class="feature"><h4>Night & Low-Visibility Assistance</h4><div class="muted">Optimized sensing for rain & night.</div></div>
-      <div class="feature"><h4>Driver Attention Alerts</h4><div class="muted">Detects distraction or drift and notifies driver.</div></div>
-      <div class="feature"><h4>Tamper & Theft Detection</h4><div class="muted">Logs disturbance & warns owner.</div></div>
-    </div>
-  </section>
-
-  <!-- WHY (4 points only) -->
-  <section id="why" class="panel reveal" aria-labelledby="whyTitle">
-    <h2 id="whyTitle" class="section-title">Why Marg Rakshak?</h2>
-    <div class="muted" style="margin-bottom:12px">Built for Indian roads, focusing on affordability and practical safety improvements.</div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px">
-      <div class="feature"><strong>Tailor-made</strong><div class="muted">Optimized for monsoon, dense traffic & two-wheelers.</div></div>
-      <div class="feature"><strong>Affordable</strong><div class="muted">Low one-time cost vs OEM ADAS.</div></div>
-      <div class="feature"><strong>Retrofit-ready</strong><div class="muted">Fits most cars and three-wheelers without major changes.</div></div>
-      <div class="feature"><strong>Reduces human error</strong><div class="muted">Actionable alerts that improve driver awareness.</div></div>
-    </div>
-  </section>
-
-  <!-- REVIEWS: centered auto-carousel -->
-  <section id="reviews" class="panel reveal" aria-labelledby="reviewsTitle">
-    <h2 id="reviewsTitle" class="section-title">Customer Reviews — 4.8★</h2>
-    <div class="reviews-wrap">
-      <div class="reviews-track" id="reviewsTrack" aria-live="polite">
-        <!-- slides (one large centered shown at a time) -->
-        <div class="review-slide review-centered">
-          <div class="avatar">R</div>
-          <div>
-            <div class="stars">★★★★☆ 4.8</div>
-            <strong>Ravi Kumar — Delhi</strong>
-            <div class="muted" style="margin-top:6px">"Installed in taxi — Marg Rakshak alerted me during a risky lane change and prevented a collision."</div>
-          </div>
-        </div>
-
-        <div class="review-slide review-side">
-          <div class="avatar">S</div>
-          <div>
-            <div class="stars">★★★★☆ 4.7</div>
-            <strong>Sneha Patel — Bengaluru</strong>
-            <div class="muted" style="margin-top:6px">"Performs very well at night. Minimal false alarms."</div>
-          </div>
-        </div>
-
-        <div class="review-slide review-side">
-          <div class="avatar">A</div>
-          <div>
-            <div class="stars">★★★★★ 5.0</div>
-            <strong>Amit Sharma — Jaipur</strong>
-            <div class="muted" style="margin-top:6px">"Great retrofit ADAS — sturdy sensors and clear alerts."</div>
-          </div>
-        </div>
-
-        <div class="review-slide review-side">
-          <div class="avatar">M</div>
-          <div>
-            <div class="stars">★★★★☆ 4.6</div>
-            <strong>Meera Desai — Mumbai</strong>
-            <div class="muted" style="margin-top:6px">"Helped me avoid a close call in heavy traffic."</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ (updated) -->
-  <section id="faq" class="panel reveal" aria-labelledby="faqTitle">
-    <h2 id="faqTitle" class="section-title">Frequently Asked Questions</h2>
-
-    <details class="faq-item"><summary>Will Marg Rakshak work on my old car?</summary>
-      <div>Yes. Sensors mount near side mirrors; the central unit runs on 12V power and is built to integrate with most vehicle types.</div>
-    </details>
-
-    <details class="faq-item"><summary>How long is the warranty?</summary>
-      <div>Standard warranty: 6–12 months depending on purchase & installation option.</div>
-    </details>
-
-    <details class="faq-item"><summary>Is installation difficult?</summary>
-      <div>Installation is straightforward for a trained technician — sensors are mirror-mounted and the compact central unit installs inside the cabin. We provide guides and can arrange local installers in many cities.</div>
-    </details>
-
-    <details class="faq-item"><summary>Will I get false alarms in slow traffic?</summary>
-      <div>We use adaptive sensitivity to reduce alerts in slow/stop traffic and increase sensitivity at higher speeds to minimize false alarms.</div>
-    </details>
-
-    <details class="faq-item"><summary>Can Marg Rakshak be used in fleet vehicles?</summary>
-      <div>Yes — fleet packages and optional analytics are available to help fleet managers monitor safety events.</div>
-    </details>
-
-    <details class="faq-item"><summary>Does the system need internet?</summary>
-      <div>No — core detection and alerting work offline on-device. Optional analytics or cloud services require connectivity and consent.</div>
-    </details>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="panel reveal" aria-labelledby="contactTitle">
-    <h2 id="contactTitle" class="section-title">Contact Us</h2>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <strong>Phone</strong><div class="muted">+91 78898 88316</div>
-        <strong style="margin-top:8px">Alt</strong><div class="muted">+91 88035 45696</div>
-        <div style="margin-top:8px"><strong>Email</strong><div class="muted">margrakshakofficial@gmail.com</div></div>
-
-        <!-- social bar separate -->
-        <div style="margin-top:12px"><strong>Follow us</strong>
-          <div class="social-bar">
-            <a class="social-icon" href="https://x.com/marg_rakshak?t=D3XuSPcI4gywQttRXsBV9g&s=09" target="_blank" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4l16 16" stroke="#001024" stroke-width="1.6" stroke-linecap="round"/></svg></a>
-            <a class="social-icon" href="https://youtube.com/@margrakshak-b4y?si=cFtyaFzxXkVuyVEV" target="_blank" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M10 8l6 4-6 4V8z" stroke="#001024" stroke-width="1.6"/></svg></a>
-            <a class="social-icon" href="https://www.instagram.com/marg_rakshak?igsh=NHpma28xODNrcTlm" target="_blank" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#001024" stroke-width="1.6"/></svg></a>
-          </div>
-        </div>
-      </div>
-
-      <div style="flex:1">
-        <form id="contactForm" onsubmit="return submitForm(event)" style="display:flex; gap:8px; flex-direction:column">
-          <input name="name" placeholder="Your name" required style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)" />
-          <input name="phone" placeholder="Phone (optional)" style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"/>
-          <textarea name="message" placeholder="Message" rows="4" style="padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"></textarea>
-          <div style="display:flex; gap:8px; flex-wrap:wrap">
-            <button class="btn-primary" type="submit">Send Message</button>
-            <button class="btn-ghost" type="button" onclick="openWhatsApp('I want to buy the Marg Rakshak Smart Surround-Aware Safety System.')">Message on WhatsApp</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <div style="height:80px"></div>
-</main>
-
-<!-- AI Chat Support (bottom-right) -->
-<div class="ai-chat">
-  <button id="openChat" class="ai-btn" aria-haspopup="dialog" aria-expanded="false" title="MargBot Support">
-    <!-- line-art chat icon -->
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="#001024" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-</div>
-
-<!-- Chat modal -->
-<div id="chatModal" role="dialog" aria-hidden="true" style="display:none; position:fixed; right:18px; bottom:96px; z-index:170">
-  <div style="width:340px; border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#041026,#07102a); border:1px solid rgba(255,255,255,0.04); box-shadow:0 30px 100px rgba(2,6,30,0.7)">
-    <div style="padding:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.02)">MargBot Support</div>
-    <div id="chatArea" style="padding:10px; max-height:260px; overflow:auto"><div style="color:var(--muted)">Hi! Ask: "price", "install", "features", "support".</div></div>
-    <div style="display:flex; gap:8px; padding:10px; border-top:1px solid rgba(255,255,255,0.02)">
-      <input id="chatInput" placeholder="Type a question..." style="flex:1; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--white)"/>
-      <button class="btn-primary" id="chatSend">Send</button>
     </div>
   </div>
-</div>
 
-<script>
-/* utilities */
-function scrollToId(id){ const el=document.getElementById(id); if(!el) return; el.scrollIntoView({behavior:'smooth', block:'start'}); closeDrawer(); }
-function openWhatsApp(msg){ const num='917889888316'; window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank'); }
+  <script>
+    /* ----------------- Utilities ----------------- */
+    function scrollToId(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+      closeDrawer();
+    }
 
-/* drawer */
-const openDrawer=document.getElementById('openDrawer'), drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay'), closeDrawerBtn=document.getElementById('closeDrawer');
-openDrawer.addEventListener('click', ()=>{ const o=!drawer.classList.toggle('open'); /* toggle properly */ drawer.classList.toggle('open'); overlay.classList.toggle('show'); openDrawer.setAttribute('aria-expanded', String(drawer.classList.contains('open'))); drawer.setAttribute('aria-hidden', String(!drawer.classList.contains('open'))); });
-closeDrawerBtn && closeDrawerBtn.addEventListener('click', closeDrawer);
-overlay.addEventListener('click', closeDrawer);
-function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('show'); openDrawer.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
+    function openWhatsApp(msg){
+      const num = '917889888316';
+      const url = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank');
+    }
 
-/* drawer link anchors */
-drawer.querySelectorAll('a[data-target]').forEach(a=> a.addEventListener('click', e=> { e.preventDefault(); scrollToId(a.getAttribute('data-target')); }));
+    /* ----------------- Drawer ----------------- */
+    const openDrawerBtn = document.getElementById('openDrawer');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+    const closeDrawerBtn = document.getElementById('closeDrawer');
 
-/* header anchor fallback */
-document.querySelectorAll('a[href^="#"]').forEach(a=> a.addEventListener('click', e=>{ if(a.getAttribute('href').length>1){ e.preventDefault(); scrollToId(a.getAttribute('href').slice(1)); } }));
+    openDrawerBtn.addEventListener('click', ()=>{
+      const isOpen = drawer.classList.toggle('open');
+      overlay.classList.toggle('show', isOpen);
+      openDrawerBtn.setAttribute('aria-expanded', String(isOpen));
+      drawer.setAttribute('aria-hidden', String(!isOpen));
+    });
+    closeDrawerBtn && closeDrawerBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
 
-/* buy button */
-document.getElementById('buyHero').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
+    function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('show'); openDrawerBtn.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
 
-/* contact form just opens WhatsApp for demo */
-function submitForm(e){ e.preventDefault(); const f=e.target; const name=f.name.value||'Customer'; const phone=f.phone.value||''; const msg=f.message.value||'I want info'; openWhatsApp(`${name} says: ${msg}${phone?('\\nPhone: '+phone):''}`); return false; }
+    // drawer link smooth scroll
+    drawer.querySelectorAll('a[data-target]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const tgt = a.getAttribute('data-target');
+        scrollToId(tgt);
+      });
+    });
 
-/* Chat widget */
-const openChatBtn=document.getElementById('openChat'), chatModal=document.getElementById('chatModal'), chatSend=document.getElementById('chatSend'), chatInput=document.getElementById('chatInput'), chatArea=document.getElementById('chatArea');
-openChatBtn.addEventListener('click', ()=>{ if(chatModal.style.display==='block'){ chatModal.style.display='none'; openChatBtn.setAttribute('aria-expanded','false'); } else { chatModal.style.display='block'; openChatBtn.setAttribute('aria-expanded','true'); }});
-chatSend.addEventListener('click', ()=>{ const q=chatInput.value.trim(); if(!q) return; appendChat('You: '+q); chatInput.value=''; setTimeout(()=> { const t=q.toLowerCase(); if(t.includes('price')) appendChat('MargBot: Price is ₹4,999. Want to buy?'); else if(t.includes('install')) appendChat('MargBot: Simple install. We provide a guide and can arrange local installers.'); else if(t.includes('features')) appendChat('MargBot: Core: Real-time prediction, blind-spot monitoring, adaptive alerts.'); else appendChat('MargBot: Thanks — our team will reach out. For urgent queries use WhatsApp.'); }, 600); });
-function appendChat(txt){ const d=document.createElement('div'); d.style.margin='8px 0'; d.style.color='var(--muted)'; d.textContent=txt; chatArea.appendChild(d); chatArea.scrollTop=chatArea.scrollHeight; }
+    // header anchor fallback
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        if(a.getAttribute('href').length>1){
+          e.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          scrollToId(id);
+        }
+      });
+    });
 
-/* particles low-density for performance */
-(function(){ const canvas=document.getElementById('particles'); if(!canvas) return; const ctx=canvas.getContext('2d'); let w=canvas.width=window.innerWidth, h=canvas.height=window.innerHeight, AREA=w*h, PCOUNT=Math.max(24, Math.floor(AREA/70000)), parts=[]; for(let i=0;i<PCOUNT;i++) parts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.6+0.6,vx:(Math.random()-0.5)*0.45,vy:(Math.random()-0.5)*0.45}); window.addEventListener('resize', ()=>{ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }); function draw(){ ctx.clearRect(0,0,w,h); for(let p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<-10) p.x=w+10; if(p.x>w+10) p.x=-10; if(p.y<-10) p.y=h+10; if(p.y>h+10) p.y=-10; const g=ctx.createRadialGradient(p.x,p.y,p.r*0.2,p.x,p.y,p.r*6); g.addColorStop(0,'rgba(123,59,255,0.18)'); g.addColorStop(0.4,'rgba(51,119,242,0.08)'); g.addColorStop(1,'rgba(5,10,20,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2); ctx.fill(); } requestAnimationFrame(draw);} draw(); })();
+    /* ----------------- Buy buttons ----------------- */
+    document.getElementById('buyHero').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
 
-/* reveal on scroll */
-const reveals=document.querySelectorAll('.reveal'); const io=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.12}); reveals.forEach(r=> io.observe(r));
+    /* ----------------- Contact form (client only) ----------------- */
+    function submitForm(e){
+      e.preventDefault();
+      const f = e.target;
+      const name = f.name.value || 'Customer';
+      const phone = f.phone.value || '';
+      const msg = f.message.value || 'I want info';
+      const text = `${name} says: ${msg}${phone?('\\nPhone: '+phone):''}`;
+      openWhatsApp(text);
+      return false;
+    }
 
-/* Reviews auto centered carousel: show one big slide at a time */
-(function(){
-  const track=document.getElementById('reviewsTrack');
-  if(!track) return;
-  const slides=Array.from(track.children);
-  let index=0;
-  function show(i){
-    slides.forEach((s,si)=>{ s.classList.remove('review-centered'); s.classList.remove('review-side'); if(si===i) s.classList.add('review-centered'); else s.classList.add('review-side'); });
-  }
-  show(0);
-  setInterval(()=>{ index=(index+1)%slides.length; show(index); }, 4200);
-})();
+    /* ----------------- Chat widget (improved, no buy option) ----------------- */
+    const chatOpen = document.getElementById('chatOpen');
+    const chatBox = document.getElementById('chatBox');
+    const chatSend = document.getElementById('chatSend');
+    const chatInput = document.getElementById('chatInput');
+    const chatContent = document.getElementById('chatContent');
 
-/* keyboard: escape closes drawer & chat */
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDrawer(); chatModal.style.display='none'; openChatBtn.setAttribute('aria-expanded','false'); }});
-</script>
+    chatOpen.addEventListener('click', ()=>{
+      if(chatBox.style.display === 'block'){ chatBox.style.display = 'none'; chatOpen.setAttribute('aria-expanded','false'); return; }
+      chatBox.style.display = 'block'; chatOpen.setAttribute('aria-expanded','true');
+    });
+
+    chatSend.addEventListener('click', ()=>{
+      const q = chatInput.value.trim(); if(!q) return;
+      appendChat('You: '+q);
+      chatInput.value='';
+      setTimeout(()=>{
+        const t = q.toLowerCase();
+        if(t.includes('price')||t.includes('cost')) appendChat('MargBot: Price is ₹4,999. Do you want to buy?');
+        else if(t.includes('install')) appendChat('MargBot: We provide guides and local installation support in many cities. Message us for booking.');
+        else if(t.includes('features')) appendChat('MargBot: Core features: Real-time risk prediction, blind-spot monitoring, lane assistance, tamper detection, adaptive alerts.');
+        else appendChat('MargBot: Thanks — our team will reach out. For immediate assistance, use the WhatsApp button.');
+      }, 700);
+    });
+
+    function appendChat(txt){
+      const div = document.createElement('div');
+      div.style.margin = '8px 0'; div.style.color = 'var(--muted)'; div.textContent = txt;
+      chatContent.appendChild(div); chatContent.scrollTop = chatContent.scrollHeight;
+    }
+
+    /* ----------------- Particles (balanced) ----------------- */
+    (function(){
+      const canvas = document.getElementById('particles'); if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+      const AREA = w*h;
+      const PCOUNT = Math.max(28, Math.floor(AREA/64000));
+      const particles = [];
+      for(let i=0;i<PCOUNT;i++){
+        particles.push({
+          x: Math.random()*w, y: Math.random()*h,
+          r: Math.random()*1.8+0.6,
+          vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5
+        });
+      }
+      window.addEventListener('resize', ()=>{ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
+
+      function draw(){
+        ctx.clearRect(0,0,w,h);
+        for(let p of particles){
+          p.x += p.vx; p.y += p.vy;
+          if(p.x < -10) p.x = w + 10;
+          if(p.x > w + 10) p.x = -10;
+          if(p.y < -10) p.y = h + 10;
+          if(p.y > h + 10) p.y = -10;
+          const g = ctx.createRadialGradient(p.x,p.y,p.r*0.2, p.x,p.y,p.r*6);
+          g.addColorStop(0, 'rgba(123,59,255,0.18)');
+          g.addColorStop(0.4, 'rgba(51,119,242,0.10)');
+          g.addColorStop(1, 'rgba(5,10,20,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2);
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ----------------- reveal on scroll ----------------- */
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, {threshold:0.12});
+    reveals.forEach(r => io.observe(r));
+
+    /* ----------------- accessibility ----------------- */
+    document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeDrawer(); chatBox.style.display='none'; } });
+
+    /* ----------------- initial reveal ----------------- */
+    window.addEventListener('load', ()=>{ document.querySelectorAll('.reveal').forEach((r,i)=> setTimeout(()=> r.classList.add('visible'), 160*(i+1))); });
+
+  </script>
 </body>
 </html>
