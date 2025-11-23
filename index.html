@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Marg Rakshak — Smart Surround-Aware Safety System</title>
-  <meta name="description" content="Marg Rakshak — affordable AI-driven surround-aware safety for Indian roads." />
+  <meta name="description" content="Marg Rakshak — affordable surround-aware safety for Indian roads." />
   <meta name="theme-color" content="#0f172a" />
   <style>
     /* ---------- THEME ---------- */
@@ -35,7 +35,7 @@
     .brand img{height:80px; width:auto; border-radius:12px; box-shadow:0 14px 40px rgba(51,119,242,0.08)} /* header style B: bigger logo */
     .brand .title{font-weight:900; font-size:20px; line-height:1; letter-spacing:0.6px}
     .brand .tag{font-size:12px; color:var(--muted)}
-    .hamburger{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; border:1px solid rgba(255,255,255,0.03); padding:10px; cursor:pointer; font-weight:900; color:var(--white); } /* made visible */
+    .hamburger{background:linear-gradient(90deg, rgba(51,119,242,0.14), rgba(123,59,255,0.06)); color:var(--white); border-radius:12px; border:1px solid rgba(255,255,255,0.03); padding:10px; cursor:pointer; font-weight:900}
     .hamburger:active{transform:translateY(1px)}
     .drawer{position:fixed; top:0; left:-360px; width:320px; height:100vh; background:linear-gradient(180deg,#07102a,#041028); border-right:1px solid rgba(255,255,255,0.03); z-index:150; padding:28px; transition:left .32s cubic-bezier(.2,.9,.2,1)}
     .drawer.open{left:0}
@@ -86,11 +86,12 @@
     .badge-yes{color:#86ffb0; font-weight:800}
     .badge-no{color:#ff9b9b; font-weight:800}
 
-    /* ---------- reviews (horizontal scroll) ---------- */
-    .reviews-row{display:flex; gap:12px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch}
-    .review-card{min-width:280px; max-width:320px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
-    .avatar{width:48px;height:48px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; color:#021029; background:linear-gradient(90deg,var(--accent1),var(--accent2)); margin-right:10px}
-    .rev-head{display:flex; align-items:center; gap:8px; margin-bottom:8px}
+    /* ---------- reviews (vertical list) ---------- */
+    .reviews-list{display:flex; flex-direction:column; gap:12px}
+    .review-card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); display:flex; gap:12px; align-items:flex-start}
+    .avatar{width:56px;height:56px;border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; color:#021029; background:linear-gradient(90deg,var(--accent1),var(--accent2))}
+    .rev-head{display:flex; align-items:center; gap:8px; margin-bottom:6px}
+    .rating-box{padding:12px; border-radius:12px; background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03); min-width:120px; text-align:center; font-weight:800; color:var(--accent1)}
 
     /* ---------- FAQ ---------- */
     .faq-item{margin:8px 0; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.02)}
@@ -100,14 +101,13 @@
     /* ---------- contact ---------- */
     .contact-grid{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
     .contact-card{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02)); min-width:220px}
-    .social-box{display:flex; gap:8px; margin-top:10px}
-    .social-btn{padding:8px 10px; border-radius:8px; font-weight:700; color:#fff; display:inline-flex; align-items:center; gap:8px; text-decoration:none}
+    .social-box{display:flex; gap:8px; margin-top:10px; justify-content:flex-start}
+    .social-btn{padding:10px 12px; border-radius:10px; font-weight:900; color:#fff; display:inline-flex; align-items:center; gap:8px; text-decoration:none; box-shadow:0 8px 30px rgba(0,0,0,0.35)}
+    .x-btn{background:#111; border:1px solid rgba(255,255,255,0.04)}
+    .yt-btn{background:#ff0000}
+    .ig-btn{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af)}
 
-    .x-btn{background:#000}   /* X / Twitter black */
-    .yt-btn{background:#FF0000}/* YouTube red */
-    .ig-btn{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af)} /* Instagram gradient */
-
-    /* ---------- floating actions (only chat on left) ---------- */
+    /* ---------- floating chat (only chat on left) ---------- */
     .float-chat{position:fixed; left:18px; bottom:20px; z-index:160}
     .circle-btn{width:64px;height:64px;border-radius:14px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border:none; color:#001024; font-weight:900; box-shadow:0 18px 60px rgba(51,119,242,0.14); cursor:pointer}
     .chat-btn{display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border-radius:14px; font-weight:800; color:#fff}
@@ -143,8 +143,8 @@
   <header class="site-header" role="banner">
     <div class="header-inner wrap">
       <div class="brand" aria-hidden="false">
-        <!-- LOGO (corrected: logo path now uses the 7324 file) -->
-        <img src="/mnt/data/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo" />
+        <!-- LOGO (correct: uses RAW URL) -->
+        <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo" />
         <div>
           <div class="title">Marg Rakshak</div>
           <div class="tag">Smart Surround-Aware Safety System</div>
@@ -196,8 +196,8 @@
       <div class="hero-right">
         <div class="device-card" aria-hidden="false">
           <div class="neon-orb" aria-hidden="true"></div>
-          <!-- PRODUCT IMAGE (corrected: product path uses the Adobe Express file) -->
-          <img src="/mnt/data/Adobe Express - file.png" alt="Product image — Marg Rakshak" />
+          <!-- PRODUCT IMAGE (correct: uses RAW URL) -->
+          <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" alt="Product image — Marg Rakshak" />
         </div>
       </div>
     </section>
@@ -217,10 +217,10 @@
         </div>
 
         <aside style="display:flex; align-items:center; justify-content:center">
-          <!-- logo with soft neon glow (glow style 1) -->
+          <!-- logo with soft neon glow -->
           <div style="padding:18px; border-radius:18px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03); display:flex; align-items:center; flex-direction:column; gap:12px">
             <div style="position:relative; display:inline-block; padding:8px; border-radius:16px;">
-              <img src="/mnt/data/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo" style="height:120px; width:auto; display:block; border-radius:12px;"/>
+              <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak logo" style="height:120px; width:auto; display:block; border-radius:12px;"/>
               <span style="position:absolute; left:-10px; top:-10px; width:140px; height:140px; border-radius:50%; filter:blur(28px); background:radial-gradient(circle at 30% 30%, rgba(51,119,242,0.16), rgba(123,59,255,0.08) 40%, transparent 65%); z-index:-1;"></span>
             </div>
             <div style="font-weight:800; color:var(--accent1)">Marg Rakshak</div>
@@ -230,7 +230,7 @@
       </div>
     </section>
 
-    <!-- PRODUCT (simplified: only kit components + How it works) -->
+    <!-- PRODUCT (simplified: only kit components + How it works boxes) -->
     <section id="product" class="panel reveal" aria-labelledby="productTitle">
       <h2 id="productTitle" class="section-title">Marg Rakshak Smart Surround-Aware Safety System</h2>
 
@@ -244,16 +244,15 @@
             <div class="tech-item" style="margin-top:8px"><strong>Central dashboard screen (safety box)</strong> — The central processing unit that aggregates sensor data, runs risk models, and displays visual alerts plus audible warnings to the driver.</div>
           </div>
 
-          <!-- HOW IT WORKS: four simple points (as requested) -->
+          <!-- HOW IT WORKS: four boxes -->
           <h3 style="margin-top:14px; margin-bottom:8px">How it works</h3>
-          <ol class="muted" style="margin-left:18px; margin-top:6px">
-            <li>Sensors continuously monitor side zones and detect nearby moving objects and relative speeds.</li>
-            <li>Central unit fuses sensor inputs and computes collision risk using distance, velocity and trajectory models.</li>
-            <li>If a risk crosses a threshold, the system issues timely audio-visual alerts on the dashboard screen.</li>
-            <li>Events are logged and tamper alerts are raised if sensors are disturbed; optional fleet analytics can aggregate these (consent based).</li>
-          </ol>
+          <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:8px">
+            <div class="tech-item"><strong>1. Sense</strong><div class="muted" style="margin-top:6px">Sensors continuously monitor side zones and detect moving objects.</div></div>
+            <div class="tech-item"><strong>2. Fuse</strong><div class="muted" style="margin-top:6px">Central unit combines data from both sensors to build a live view of surrounding objects.</div></div>
+            <div class="tech-item"><strong>3. Predict</strong><div class="muted" style="margin-top:6px">On-device risk models calculate trajectories and closure rates to assess threat level.</div></div>
+            <div class="tech-item"><strong>4. Alert</strong><div class="muted" style="margin-top:6px">When risk exceeds thresholds, visual and audible alerts are issued on the dashboard screen.</div></div>
+          </div>
 
-          <p class="muted" style="margin-top:12px">Installation is straightforward for a trained installer — sensors mount near the side mirrors and the central unit is placed on the dash; power is drawn from the 12V supply. We offer installation support via our network.</p>
         </div>
 
         <aside>
@@ -288,7 +287,7 @@
       </div>
     </section>
 
-    <!-- WHY & COMPARE (removed deployment row, 4 points only) -->
+    <!-- WHY & COMPARE (4 points only) -->
     <section id="why" class="panel reveal" aria-labelledby="whyTitle">
       <h2 id="whyTitle" class="section-title">Why Marg Rakshak?</h2>
       <div class="muted" style="margin-bottom:12px">Tailor-made for Indian conditions — an affordable retrofit solution bringing modern safety features to older vehicles and three-wheelers.</div>
@@ -306,48 +305,82 @@
       </table>
     </section>
 
-    <!-- REVIEWS (horizontal scroll; restored earlier style; more reviews) -->
+    <!-- REVIEWS (vertical; rating box separate; removed 'average' word) -->
     <section id="reviews" class="panel reveal" aria-labelledby="reviewsTitle">
-      <h2 id="reviewsTitle" class="section-title">Reviews — Average 4.8★</h2>
-      <div class="reviews-row" aria-live="polite">
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">R</div><div><strong>Ravi Kumar</strong><div class="muted" style="font-size:13px">Delhi</div></div></div>
-          <div class="muted">"Installed in my taxi — Marg Rakshak alerted me twice and helped avoid collisions during peak hours."</div>
+      <h2 id="reviewsTitle" class="section-title">Reviews</h2>
+
+      <div style="display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap">
+        <div style="flex:1; min-width:320px">
+          <div class="reviews-list">
+            <div class="review-card">
+              <div class="avatar">R</div>
+              <div>
+                <div style="font-weight:800">Ravi Kumar <span class="muted" style="font-weight:600; font-size:13px"> — Delhi</span></div>
+                <div class="muted" style="margin-top:6px">"Installed in my taxi — Marg Rakshak alerted me twice and helped avoid collisions during peak hours."</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="avatar">S</div>
+              <div>
+                <div style="font-weight:800">Sneha Patel <span class="muted" style="font-weight:600; font-size:13px"> — Bengaluru</span></div>
+                <div class="muted" style="margin-top:6px">"Excellent night performance and low false alarms. Great for city driving."</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="avatar">A</div>
+              <div>
+                <div style="font-weight:800">Amit Sharma <span class="muted" style="font-weight:600; font-size:13px"> — Jaipur</span></div>
+                <div class="muted" style="margin-top:6px">"Affordable ADAS retrofit — good build quality and straightforward install."</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="avatar">M</div>
+              <div>
+                <div style="font-weight:800">Meera Desai <span class="muted" style="font-weight:600; font-size:13px"> — Mumbai</span></div>
+                <div class="muted" style="margin-top:6px">"Helped in heavy traffic — accurate alerts without distracting me."</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="avatar">V</div>
+              <div>
+                <div style="font-weight:800">Vikram Rao <span class="muted" style="font-weight:600; font-size:13px"> — Hyderabad</span></div>
+                <div class="muted" style="margin-top:6px">"Great for fleet vehicles — reduced near-miss incidents in our taxis."</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="avatar">P</div>
+              <div>
+                <div style="font-weight:800">Pooja R. <span class="muted" style="font-weight:600; font-size:13px"> — Pune</span></div>
+                <div class="muted" style="margin-top:6px">"Robust sensors and clear alerts. Customer support was responsive."</div>
+              </div>
+            </div>
+
+            <div class="review-card">
+              <div class="avatar">K</div>
+              <div>
+                <div style="font-weight:800">Karan Mehta <span class="muted" style="font-weight:600; font-size:13px"> — Ahmedabad</span></div>
+                <div class="muted" style="margin-top:6px">"Good product for the price — installation was quick and user-friendly."</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">S</div><div><strong>Sneha Patel</strong><div class="muted" style="font-size:13px">Bengaluru</div></div></div>
-          <div class="muted">"Excellent night performance and low false alarms. Great for city driving."</div>
-        </div>
-
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">A</div><div><strong>Amit Sharma</strong><div class="muted" style="font-size:13px">Jaipur</div></div></div>
-          <div class="muted">"Affordable ADAS retrofit — good build quality and easy install."</div>
-        </div>
-
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">M</div><div><strong>Meera Desai</strong><div class="muted" style="font-size:13px">Mumbai</div></div></div>
-          <div class="muted">"Helped in heavy traffic — accurate alerts without distracting me."</div>
-        </div>
-
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">V</div><div><strong>Vikram Rao</strong><div class="muted" style="font-size:13px">Hyderabad</div></div></div>
-          <div class="muted">"Great for fleet vehicles — reduced near-miss incidents in our taxis."</div>
-        </div>
-
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">P</div><div><strong>Pooja R.</strong><div class="muted" style="font-size:13px">Pune</div></div></div>
-          <div class="muted">"Robust sensors and clear alerts. Customer support was responsive."</div>
-        </div>
-
-        <div class="review-card">
-          <div class="rev-head"><div class="avatar">K</div><div><strong>Karan Mehta</strong><div class="muted" style="font-size:13px">Ahmedabad</div></div></div>
-          <div class="muted">"Good product for the price — installation was quick and user-friendly."</div>
-        </div>
+        <aside style="width:220px">
+          <div class="rating-box">
+            <div style="font-size:28px; font-weight:900; color:var(--accent1)">4.8★</div>
+            <div class="muted" style="margin-top:6px">1.5k+ installs</div>
+            <button class="btn-primary" style="width:100%; margin-top:12px" onclick="scrollToId('contact')">Contact / Buy</button>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <!-- FAQ (kept earlier updates; removed record video Q; removed 'wiring' term) -->
+    <!-- FAQ (kept earlier updates) -->
     <section id="faq" class="panel reveal" aria-labelledby="faqTitle">
       <h2 id="faqTitle" class="section-title">Frequently Asked Questions</h2>
 
@@ -384,7 +417,7 @@
       </details>
     </section>
 
-    <!-- CONTACT (removed GitHub link; social box separate with brand colors) -->
+    <!-- CONTACT -->
     <section id="contact" class="panel reveal" aria-labelledby="contactTitle">
       <h2 id="contactTitle" class="section-title">Contact Us</h2>
       <div class="contact-grid">
@@ -392,13 +425,6 @@
           <strong>Phone</strong><div class="muted">+91 78898 88316</div>
           <strong style="margin-top:8px">Alt</strong><div class="muted">+91 88035 45696</div>
           <div style="margin-top:8px"><strong>Email</strong><div class="muted">margrakshakofficial@gmail.com</div></div>
-
-          <!-- Social media box (separate) -->
-          <div class="social-box" role="navigation" aria-label="Follow Marg Rakshak">
-            <a class="social-btn x-btn" href="https://x.com/marg_rakshak?t=D3XuSPcI4gywQttRXsBV9g&s=09" target="_blank">X</a>
-            <a class="social-btn yt-btn" href="https://youtube.com/@margrakshak-b4y?si=cFtyaFzxXkVuyVEV" target="_blank">YouTube</a>
-            <a class="social-btn ig-btn" href="https://www.instagram.com/marg_rakshak?igsh=NHpma28xODNrcTlm" target="_blank">Instagram</a>
-          </div>
         </div>
 
         <div style="flex:1">
@@ -411,6 +437,18 @@
               <button class="btn-ghost" type="button" onclick="openWhatsApp('I want to buy the Marg Rakshak Smart Surround-Aware Safety System.')">Message on WhatsApp</button>
             </div>
           </form>
+        </div>
+      </div>
+
+      <!-- Social media box BELOW contact details (improved look & brand colors) -->
+      <div style="margin-top:18px; display:flex; justify-content:center;">
+        <div style="width:100%; max-width:520px; padding:14px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div style="font-weight:800">Follow Marg Rakshak</div>
+          <div class="social-box" role="navigation" aria-label="Follow Marg Rakshak">
+            <a class="social-btn x-btn" href="https://x.com/marg_rakshak?t=D3XuSPcI4gywQttRXsBV9g&s=09" target="_blank" rel="noopener">X</a>
+            <a class="social-btn yt-btn" href="https://youtube.com/@margrakshak-b4y?si=cFtyaFzxXkVuyVEV" target="_blank" rel="noopener">YouTube</a>
+            <a class="social-btn ig-btn" href="https://www.instagram.com/marg_rakshak?igsh=NHpma28xODNrcTlm" target="_blank" rel="noopener">Instagram</a>
+          </div>
         </div>
       </div>
     </section>
