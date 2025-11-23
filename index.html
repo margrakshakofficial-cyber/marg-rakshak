@@ -6,9 +6,10 @@
   <title>Marg Rakshak — Smart Surround-Aware Safety System</title>
   <meta name="description" content="Marg Rakshak — affordable AI-driven safety for Indian roads. Smart Surround-Aware Safety System." />
   <meta name="theme-color" content="#0f172a" />
-  <link rel="icon" href="/mnt/data/IMG_20251122_175114_860.webp" />
+  <!-- Favicon uses the product image as fallback -->
+  <link rel="icon" href="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" />
   <style>
-    /* ---------- ROOT THEME ---------- */
+    /* ================= ROOT THEME ================= */
     :root{
       --bg:#05060a;
       --panel:#071025;
@@ -23,26 +24,32 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%; margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--white); -webkit-font-smoothing:antialiased}
-    a{color:inherit}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:20px; position:relative; z-index:5}
 
-    /* ---------- LAYOUT ---------- */
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:20px; position:relative;}
-    header.site-header{position:fixed; left:0; right:0; top:14px; z-index:120; display:flex; justify-content:space-between; align-items:center; padding:10px 20px; pointer-events:auto}
+    /* ================= HEADER / DRAWER ================= */
+    header.site-header{position:fixed; left:0; right:0; top:12px; z-index:120; display:flex; justify-content:center; pointer-events:none}
+    .header-inner{width:100%; max-width:var(--maxw); display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; pointer-events:auto}
     .brand{display:flex; align-items:center; gap:12px; background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
-    .brand img{height:46px; width:46px; object-fit:contain; border-radius:10px; display:block; box-shadow:0 8px 30px rgba(51,119,242,0.08)}
-    .brand .title{font-weight:700; font-size:16px; letter-spacing:0.2px}
-    .hamburger{background:transparent;border:0;color:var(--white);font-size:22px;padding:8px;border-radius:10px; cursor:pointer}
-    .nav-drawer{position:fixed; top:0; left:-320px; width:300px; height:100vh; background:linear-gradient(180deg,#07102a, #051022); border-right:1px solid rgba(255,255,255,0.03); z-index:140; padding:28px; transition:left .34s cubic-bezier(.2,.9,.2,1); box-shadow: 40px 0 120px rgba(2,6,30,0.7)}
+    .brand img{height:60px; width:auto; object-fit:contain; border-radius:10px; display:block; box-shadow:0 8px 30px rgba(51,119,242,0.08)}
+    .brand .title{font-weight:800; font-size:16px; letter-spacing:0.2px}
+    .hamburger{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; border:1px solid rgba(255,255,255,0.03); padding:8px 10px; cursor:pointer; color:var(--white); font-weight:800}
+    .hamburger:active{transform:translateY(1px)}
+    .nav-drawer{position:fixed; top:0; left:-340px; width:320px; height:100vh; background:linear-gradient(180deg,#07102a,#041028); border-right:1px solid rgba(255,255,255,0.03); z-index:140; padding:28px; transition:left .36s cubic-bezier(.2,.9,.2,1); box-shadow: 40px 0 120px rgba(2,6,30,0.7)}
     .nav-drawer.open{left:0}
     .nav-drawer h3{margin:0 0 12px 0; font-size:18px}
-    .nav-drawer a{display:block; padding:12px 10px; margin:6px 0; border-radius:10px; color:var(--muted); text-decoration:none; font-weight:600}
+    .nav-drawer a{display:block; padding:12px 10px; margin:6px 0; border-radius:10px; color:var(--muted); text-decoration:none; font-weight:700}
     .nav-drawer a:hover{color:var(--white); background:linear-gradient(90deg, rgba(51,119,242,0.06), rgba(123,59,255,0.03))}
 
-    /* ---------- HERO ---------- */
+    /* overlay to close drawer */
+    .drawer-overlay{position:fixed; inset:0; background:rgba(1,4,10,0.45); z-index:130; display:none}
+    .drawer-overlay.show{display:block}
+
+    /* ================= HERO ================= */
     .hero{display:flex; gap:28px; align-items:center; min-height:78vh; padding-top:84px}
-    .hero-left{flex:1; padding:20px}
+    .hero-left{flex:1; padding:20px; z-index:6}
     .eyebadge{display:inline-block;font-weight:800;color:var(--accent3); background:rgba(255,117,31,0.06); padding:6px 10px; border-radius:999px; margin-bottom:12px}
-    h1.hero-title{font-size:38px; margin:6px 0 12px; line-height:1.02; color:var(--white); text-shadow: 0 10px 40px rgba(3,8,25,0.7)}
+    h1.hero-title{font-size:38px; margin:6px 0 12px; line-height:1.02; color:var(--white); text-shadow: 0 12px 40px rgba(3,8,25,0.7)}
     p.lead{color:var(--muted); font-size:15px; max-width:60ch}
     .hero-cta{margin-top:18px; display:flex; gap:12px; align-items:center}
     .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; padding:12px 18px; border-radius:12px; border:0; font-weight:800; cursor:pointer; box-shadow:0 12px 50px rgba(51,119,242,0.14)}
@@ -51,13 +58,13 @@
     .kpi{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02); min-width:130px}
     .kpi strong{display:block; font-size:18px}
 
-    .hero-right{width:520px; max-width:45%; position:relative}
+    .hero-right{width:520px; max-width:45%; position:relative; z-index:6}
     .device-card{background:linear-gradient(180deg,#071028, #04101b); border-radius:18px; padding:18px; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 40px 120px rgba(2,6,30,0.6); overflow:hidden}
     .device-card img{width:100%; height:320px; object-fit:cover; border-radius:12px; display:block; transform:translateY(0); transition:transform .6s ease}
     .device-card:hover img{transform:translateY(-6px)}
     .neon-glow{position:absolute; inset:auto -60px -60px auto; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle at 20% 20%, rgba(51,119,242,0.14), transparent 20%, transparent 80%); filter:blur(36px); opacity:0.9; pointer-events:none}
 
-    /* ---------- SECTIONS ---------- */
+    /* ================= SECTIONS ================= */
     section.panel{margin:36px 0; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:14px; padding:22px; border:1px solid rgba(255,255,255,0.02)}
     .two-col{display:grid; grid-template-columns:1fr 360px; gap:18px; align-items:start}
     h2.section-title{margin:0 0 12px 0; font-size:22px}
@@ -88,7 +95,7 @@
     /* floating buttons & chat */
     .float-buy{position:fixed; right:18px; bottom:100px; z-index:160}
     .float-chat{position:fixed; right:18px; bottom:20px; z-index:160}
-    .circle-btn{width:64px;height:64px;border-radius:14px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border:none; color:#001024; font-weight:800; box-shadow:0 18px 60px rgba(51,119,242,0.14); cursor:pointer}
+    .circle-btn{width:64px;height:64px;border-radius:14px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border:none; color:#001024; font-weight:900; box-shadow:0 18px 60px rgba(51,119,242,0.14); cursor:pointer}
 
     /* particles canvas */
     canvas#particles{position:fixed; inset:0; z-index:0; display:block; pointer-events:none}
@@ -108,21 +115,21 @@
       .kpis{flex-direction:column}
     }
 
-    /* small animation and reveal */
+    /* reveal */
     .reveal{opacity:0; transform:translateY(18px); transition:all .7s cubic-bezier(.2,.9,.2,1)}
     .reveal.visible{opacity:1; transform:none}
   </style>
 </head>
 <body>
 
-  <!-- PARTICLE CANVAS (low density for balanced performance) -->
+  <!-- PARTICLES CANVAS -->
   <canvas id="particles" aria-hidden="true"></canvas>
 
-  <!-- NAV / HEADER -->
-  <header class="site-header">
-    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="header-inner wrap">
       <div class="brand" aria-hidden="false">
-        <img src="/mnt/data/IMG_20251122_175114_860.webp" alt="Marg Rakshak logo" />
+        <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/Adobe%20Express%20-%20file.png" alt="Marg Rakshak logo" />
         <div>
           <div class="title">Marg Rakshak</div>
           <div style="font-size:11px; color:var(--muted)">Safety Around Us</div>
@@ -133,14 +140,15 @@
     </div>
   </header>
 
-  <!-- NAV DRAWER -->
+  <!-- DRAWER -->
+  <div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
   <nav id="drawer" class="nav-drawer" aria-hidden="true">
     <h3>Menu</h3>
     <a href="#home" data-target="home">Home</a>
     <a href="#about" data-target="about">About</a>
     <a href="#product" data-target="product">Product</a>
     <a href="#features" data-target="features">Features</a>
-    <a href="#why" data-target="why">Why Marg Rakshak</a>
+    <a href="#why" data-target="why">Why</a>
     <a href="#compare" data-target="compare">Compare</a>
     <a href="#reviews" data-target="reviews">Reviews</a>
     <a href="#faq" data-target="faq">FAQ</a>
@@ -148,7 +156,8 @@
     <div style="margin-top:18px"><button id="closeMenu" class="btn-ghost" style="width:100%">Close</button></div>
   </nav>
 
-  <main class="wrap" id="home" role="main" style="z-index:10; position:relative;">
+  <!-- MAIN -->
+  <main class="wrap" id="home" role="main">
 
     <!-- HERO -->
     <section class="hero" aria-labelledby="heroTitle">
@@ -172,7 +181,7 @@
       <div class="hero-right">
         <div class="device-card" aria-hidden="false">
           <div class="neon-glow" aria-hidden="true"></div>
-          <img src="/mnt/data/Adobe Express - file.png" alt="Marg Rakshak product demo" />
+          <img src="https://raw.githubusercontent.com/margrakshakofficial-cyber/Marg-rakshak/refs/heads/main/7324-Picsart-BackgroundRemover.jpg.png" alt="Marg Rakshak product demo" />
         </div>
       </div>
     </section>
@@ -193,8 +202,11 @@
 
         <aside>
           <div style="text-align:center">
-            <img src="/mnt/data/Marg Rakshak_20251123_013209_0000.png" alt="business card front" style="width:100%; border-radius:10px; border:1px solid rgba(255,255,255,0.03);"/>
-            <div class="muted" style="margin-top:8px">Jammu, India • <a href="mailto:margrakshakofficial@gmail.com" style="color:var(--accent1)">margrakshakofficial@gmail.com</a></div>
+            <!-- business card removed as requested -->
+            <div style="padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(51,119,242,0.02), rgba(123,59,255,0.02))">
+              <div style="font-weight:800; font-size:20px; color:var(--accent1)">Jammu, India</div>
+              <div class="muted" style="margin-top:8px">margrakshakofficial@gmail.com</div>
+            </div>
           </div>
         </aside>
       </div>
@@ -247,12 +259,12 @@
       </div>
     </section>
 
-    <!-- WHY & COMPARISON -->
+    <!-- WHY & COMPARE -->
     <section id="why" class="panel reveal" aria-labelledby="whyTitle">
       <h2 id="whyTitle" class="section-title">Why Marg Rakshak?</h2>
       <div class="muted" style="margin-bottom:12px">Tailor-made for Indian conditions — affordable retrofit solution that brings modern ADAS benefits to older vehicles and 3-wheelers.</div>
 
-      <table class="compare" role="table" aria-label="Compare">
+      <table id="compare" class="compare" role="table" aria-label="Compare">
         <thead>
           <tr><th>Feature</th><th>Marg Rakshak</th><th>Imported ADAS</th></tr>
         </thead>
@@ -271,9 +283,12 @@
       <h2 id="reviewsTitle" class="section-title">Reviews</h2>
       <div style="display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap">
         <div style="flex:1; min-width:320px">
-          <div class="review"><strong>Ravi K. — Delhi</strong><div class="muted">"Installed in my taxi — the alerts are fast and saved me from a collision."</div></div>
-          <div class="review"><strong>Sneha P. — Bengaluru</strong><div class="muted">"Performs well in drizzle and night driving. Great product for the price."</div></div>
-          <div class="review"><strong>Amit S. — Jaipur</strong><div class="muted">"Affordable ADAS. Tamper detection is reassuring."</div></div>
+          <div class="reviews">
+            <div class="review"><strong>Ravi K. — Delhi</strong><div class="muted">"Installed in my taxi — the alerts are fast and saved me from a collision."</div></div>
+            <div class="review"><strong>Sneha P. — Bengaluru</strong><div class="muted">"Performs well in drizzle and night driving. Great product for the price."</div></div>
+            <div class="review"><strong>Amit S. — Jaipur</strong><div class="muted">"Affordable ADAS. Tamper detection is reassuring."</div></div>
+            <div class="review"><strong>Meera D. — Mumbai</strong><div class="muted">"Helped me avoid a close call in heavy traffic."</div></div>
+          </div>
         </div>
 
         <aside style="width:300px">
@@ -325,7 +340,7 @@
     <div style="height:80px"></div>
   </main>
 
-  <!-- Floating Buy & Chat -->
+  <!-- FLOATING ACTIONS -->
   <div class="float-buy">
     <button class="circle-btn" id="buyFloat" title="Buy now">BUY</button>
   </div>
@@ -333,7 +348,7 @@
     <button class="circle-btn" id="chatFloat" title="Support">💬</button>
   </div>
 
-  <!-- Simple Chat Modal (client-only) -->
+  <!-- CHAT BOX -->
   <div id="chatBox" role="dialog" aria-hidden="true" style="display:none; position:fixed; right:18px; bottom:96px; z-index:170">
     <div style="width:340px; border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#041026,#07102a); border:1px solid rgba(255,255,255,0.04); box-shadow:0 30px 100px rgba(2,6,30,0.7)">
       <div style="padding:10px; font-weight:800; border-bottom:1px solid rgba(255,255,255,0.02)">MargBot Support</div>
@@ -348,7 +363,7 @@
   </div>
 
   <script>
-    /* =================== Utilities =================== */
+    /* ======= Utility & Scrolling ======= */
     function scrollToId(id){
       const el = document.getElementById(id);
       if(!el) return;
@@ -357,27 +372,29 @@
     }
 
     function openWhatsApp(msg){
-      const number = '917889888316';
+      const number = '917889888316'; // without +
       const url = 'https://wa.me/' + number + '?text=' + encodeURIComponent(msg);
       window.open(url, '_blank');
     }
 
-    /* ========== Drawer behavior ========== */
+    /* ======= Drawer toggles ======= */
     const openMenu = document.getElementById('openMenu');
     const drawer = document.getElementById('drawer');
-    const closeMenu = document.getElementById('closeMenu');
+    const overlay = document.getElementById('drawerOverlay');
+    const closeBtn = document.getElementById('closeMenu');
 
     openMenu.addEventListener('click', ()=> {
       const isOpen = drawer.classList.toggle('open');
+      overlay.classList.toggle('show', isOpen);
       openMenu.setAttribute('aria-expanded', String(isOpen));
       drawer.setAttribute('aria-hidden', String(!isOpen));
     });
-    closeMenu && closeMenu.addEventListener('click', closeDrawer);
+    closeBtn && closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
 
-    // close drawer helper
-    function closeDrawer(){ drawer.classList.remove('open'); openMenu.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
+    function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('show'); openMenu.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
 
-    // drawer links smooth scrolling
+    // drawer links
     drawer.querySelectorAll('a[data-target]').forEach(a=>{
       a.addEventListener('click', e=>{
         e.preventDefault();
@@ -386,34 +403,35 @@
       });
     });
 
-    // also header links (if any)
+    // also header anchor fallback
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', e=>{
         if(a.getAttribute('href').length>1){
-          e.preventDefault(); const id = a.getAttribute('href').slice(1); scrollToId(id);
+          e.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          scrollToId(id);
         }
       });
     });
 
-    /* ========== Buy buttons ========== */
+    /* ======= Buy buttons behavior ======= */
     document.getElementById('buyNow').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
     document.getElementById('buyNow2').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
     document.getElementById('buyFloat').addEventListener('click', ()=> openWhatsApp('Hi, I want to buy the Marg Rakshak Smart Surround-Aware Safety System.'));
 
-    /* ========== Contact form (client-only demo) ========== */
+    /* ======= Contact form (client-side) ======= */
     function submitForm(e){
       e.preventDefault();
       const f = e.target;
       const name = f.name.value || 'Customer';
       const phone = f.phone.value || '';
       const msg = f.message.value || 'I want info';
-      // For now we open WhatsApp to continue the conversation (no backend)
       const text = `${name} says: ${msg}${phone?('\\nPhone: '+phone):''}`;
       openWhatsApp(text);
       return false;
     }
 
-    /* ========== Chat widget (simulated) ========== */
+    /* ======= Chat widget (simple) ======= */
     const chatFloat = document.getElementById('chatFloat');
     const chatBox = document.getElementById('chatBox');
     const chatSend = document.getElementById('chatSend');
@@ -430,12 +448,11 @@
       appendChat('You: '+q);
       chatInput.value='';
       setTimeout(()=> {
-        // simple rule-based replies
         const t = q.toLowerCase();
-        if(t.includes('price')||t.includes('cost')) appendChat('MargBot: Price is ₹4,999. Want to buy?');
-        else if(t.includes('install')) appendChat('MargBot: We provide installation guide and can arrange local install in many cities.');
-        else if(t.includes('features')) appendChat('MargBot: Real-time risk prediction, blind-spot monitoring, tamper detection and more.');
-        else appendChat('MargBot: Thanks — we will contact you. You can message on WhatsApp for a live agent.');
+        if(t.includes('price')||t.includes('cost')) appendChat('MargBot: Price is ₹4,999. Would you like to buy?');
+        else if(t.includes('install')) appendChat('MargBot: We provide a guide and can arrange local install in many cities.');
+        else if(t.includes('features')) appendChat('MargBot: Real-time risk prediction, blind-spot monitoring, tamper detection, adaptive alerts and more.');
+        else appendChat('MargBot: Thanks — we will contact you. For immediate support, click the Buy/WhatsApp button.');
       }, 700);
     });
 
@@ -443,21 +460,22 @@
       const d = document.createElement('div'); d.style.margin='8px 0'; d.style.color='var(--muted)'; d.textContent = txt; chatContent.appendChild(d); chatContent.scrollTop = chatContent.scrollHeight;
     }
 
-    /* ========== Particles (light/low density) ========== */
+    /* ======= Particles (balanced for performance) ======= */
     (function(){
       const canvas = document.getElementById('particles');
       const ctx = canvas.getContext('2d');
       let w = canvas.width = window.innerWidth;
       let h = canvas.height = window.innerHeight;
-      const PCOUNT = Math.max(40, Math.floor((w*h)/40000)); // balanced
+      const AREA = w*h;
+      const PCOUNT = Math.max(30, Math.floor(AREA/60000)); // balanced density
       const particles = [];
       for(let i=0;i<PCOUNT;i++){
         particles.push({
           x: Math.random()*w,
           y: Math.random()*h,
-          r: Math.random()*1.8+0.6,
-          vx: (Math.random()-0.5)*0.3,
-          vy: (Math.random()-0.5)*0.3,
+          r: Math.random()*2+0.6,
+          vx: (Math.random()-0.5)*0.4,
+          vy: (Math.random()-0.5)*0.4,
           hue: 190 + Math.random()*120
         });
       }
@@ -465,6 +483,13 @@
 
       function draw(){
         ctx.clearRect(0,0,w,h);
+        // subtle gradient overlay waves
+        const grad = ctx.createLinearGradient(0,0,w,h);
+        grad.addColorStop(0, 'rgba(7,16,40,0.06)');
+        grad.addColorStop(1, 'rgba(3,8,20,0.06)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,w,h);
+
         for(let p of particles){
           p.x += p.vx; p.y += p.vy;
           if(p.x<0) p.x = w;
@@ -472,7 +497,7 @@
           if(p.y<0) p.y = h;
           if(p.y> h) p.y = 0;
           ctx.beginPath();
-          const g = ctx.createRadialGradient(p.x,p.y,p.r*0.2, p.x,p.y,p.r*8);
+          const g = ctx.createRadialGradient(p.x,p.y,p.r*0.2, p.x,p.y,p.r*6);
           g.addColorStop(0, `rgba(123,59,255,0.20)`);
           g.addColorStop(0.4, `rgba(51,119,242,0.09)`);
           g.addColorStop(1, `rgba(5,10,20,0)`);
@@ -485,7 +510,7 @@
       draw();
     })();
 
-    /* ========== Scroll reveal for performance ========== */
+    /* ======= Scroll reveal ======= */
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(entries=>{
       entries.forEach(e=>{
@@ -494,14 +519,14 @@
     }, {threshold:0.12});
     reveals.forEach(r=> io.observe(r));
 
-    /* ========== small accessibility keyboard close for drawer ========== */
+    /* ======= Accessibility: ESC closes drawer/chat ======= */
     document.addEventListener('keydown', e=>{
       if(e.key === 'Escape'){ closeDrawer(); chatBox.style.display='none'; }
     });
 
-    // initial small delay reveal home
+    // initial reveal
     window.addEventListener('load', ()=> {
-      document.querySelectorAll('.reveal').forEach((r,i)=> setTimeout(()=> r.classList.add('visible'), 200*(i+1)));
+      document.querySelectorAll('.reveal').forEach((r,i)=> setTimeout(()=> r.classList.add('visible'), 180*(i+1)));
     });
   </script>
 </body>
